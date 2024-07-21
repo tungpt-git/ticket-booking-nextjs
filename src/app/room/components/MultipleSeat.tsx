@@ -22,11 +22,10 @@ export const MultipleSeat = ({
       className={classNames(
         "border-2 border-solid h-8 cursor-pointer rounded transition-all",
         {
-          "hover:bg-fuchsia-500 border-fuchsia-500": !disabled,
-          "hover:bg-opacity-30 text-fuchsia-500": !selected && !disabled,
-          "bg-fuchsia-500 text-white": selected && !disabled,
-          "border-stone-300 bg-stone-300 text-stone-300 cursor-not-allowed":
-            disabled,
+          "hover:bg-secondary border-secondary": !disabled,
+          "hover:bg-opacity-30 text-secondary": !selected && !disabled,
+          "bg-secondary text-white": selected && !disabled,
+          "border-neutral bg-neutral text-neutral cursor-not-allowed": disabled,
         }
       )}
       onClick={disabled ? undefined : onSelect}

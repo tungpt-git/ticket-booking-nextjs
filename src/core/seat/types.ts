@@ -2,6 +2,6 @@ export type Seat = {
   id: string;
   idx: string | string[];
   name: string;
-  isVip?: boolean;
+  type: "normal" | "vip";
   isPlaceholder?: boolean;
 };

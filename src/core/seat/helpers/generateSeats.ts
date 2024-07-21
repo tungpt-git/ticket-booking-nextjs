@@ -18,7 +18,7 @@ export const fullSingleSeatRow = ({
         id: [rowName, index].join(""),
         idx: idx,
         name: idx,
-        isVip: false,
+        type: "normal" as const,
         isPlaceholder: true,
       };
 
@@ -37,7 +37,7 @@ export const fullSingleSeatRow = ({
       id: [rowName, name].join(""),
       idx,
       name,
-      isVip: vipIndex?.includes(_idx) ?? false,
+      type: vipIndex?.includes(_idx) ? ("vip" as const) : ("normal" as const),
     };
     acc[idx] = seatInfo;
 
@@ -63,7 +63,7 @@ export const fullCoupleSeatRow = ({
         id: [rowName, index].join(""),
         idx: idx,
         name: idx,
-        isVip: false,
+        type: "normal" as const,
         isPlaceholder: true,
       };
 
@@ -80,7 +80,7 @@ export const fullCoupleSeatRow = ({
       id: [rowName, idxs.join(",")].join(""),
       idx: idxs,
       name: idxs.join(","),
-      isVip: false,
+      type: "normal" as const,
     };
 
     acc[index.toString()] = seatInfo;

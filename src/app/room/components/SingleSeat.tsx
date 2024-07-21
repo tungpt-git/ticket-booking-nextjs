@@ -5,36 +5,35 @@ import { PropsWithChildren } from "react";
 export const SingleSeat = ({
   selected,
   onSelect,
-  variant = "default",
+  variant = "normal",
   children,
   className,
   disabled = false,
 }: PropsWithChildren<{
   selected?: boolean;
   onSelect?: VoidFunction;
-  variant?: "default" | "vip";
+  variant?: "normal" | "vip";
   className?: string;
   disabled?: boolean;
 }>) => {
   return (
     <div
       className={classNames(
-        "border-2 border-solid border-stone-300 rounded w-8 h-8 cursor-pointer transition-all",
+        "border-2 border-solid border-neutral rounded w-8 h-8 cursor-pointer transition-all",
         {
           "hover:bg-opacity-30": !selected && !disabled,
           //
-          "bg-cyan-500 !border-cyan-500": selected && variant === "default",
-          "hover:bg-cyan-500 hover:border-cyan-500 text-stone-300 hover:text-cyan-500":
-            !selected && variant === "default" && !disabled,
+          "bg-primary !border-primary": selected && variant === "normal",
+          "hover:bg-primary hover:border-primary text-neutral hover:text-primary":
+            !selected && variant === "normal" && !disabled,
           //
-          "!border-yellow-500 text-yellow-500": variant === "vip",
-          "bg-yellow-500": selected && variant === "vip",
-          "hover:bg-yellow-500": !selected && variant === "vip" && !disabled,
+          "!border-warning text-warning": variant === "vip",
+          "bg-warning": selected && variant === "vip",
+          "hover:bg-warning": !selected && variant === "vip" && !disabled,
           //
           "!text-white": selected,
           //
-          "border-stone-300 bg-stone-300 text-stone-300 cursor-not-allowed":
-            disabled,
+          "border-neutral bg-neutral text-neutral cursor-not-allowed": disabled,
         },
         className
       )}
