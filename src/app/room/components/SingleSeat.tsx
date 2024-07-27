@@ -1,4 +1,5 @@
 "use client";
+import { TSeat } from "@/core/seat/types";
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
 
@@ -9,35 +10,41 @@ export const SingleSeat = ({
   children,
   className,
   disabled = false,
+  owned,
 }: PropsWithChildren<{
   selected?: boolean;
   onSelect?: VoidFunction;
-  variant?: "normal" | "vip";
+  variant?: TSeat["type"];
   className?: string;
   disabled?: boolean;
+  owned?: boolean;
 }>) => {
   return (
     <div
       className={classNames(
-        "border-2 border-solid border-neutral rounded w-8 h-8 cursor-pointer transition-all",
+        "border-2 border-solid border-neutral-500 rounded w-10 h-10 transition-all",
         {
-          "hover:bg-opacity-30": !selected && !disabled,
+          "hover:bg-opacity-30": !(owned || selected) && !disabled,
           //
-          "bg-primary !border-primary": selected && variant === "normal",
-          "hover:bg-primary hover:border-primary text-neutral hover:text-primary":
-            !selected && variant === "normal" && !disabled,
+          "bg-primary !border-primary":
+            (owned || selected) && variant === "normal",
+          "hover:bg-primary hover:border-primary text-neutral-500 hover:text-primary":
+            !(owned || selected) && variant === "normal" && !disabled,
           //
           "!border-warning text-warning": variant === "vip",
-          "bg-warning": selected && variant === "vip",
-          "hover:bg-warning": !selected && variant === "vip" && !disabled,
+          "bg-warning": (owned || selected) && variant === "vip",
+          "hover:bg-warning":
+            !(owned || selected) && variant === "vip" && !disabled,
           //
-          "!text-white": selected,
+          "!text-white": owned || selected,
           //
-          "border-neutral bg-neutral text-neutral cursor-not-allowed": disabled,
+          "cursor-pointer": !owned && !disabled,
+          "border-neutral-500 bg-neutral-500 text-neutral-500": disabled,
+          "cursor-not-allowed opacity-50": owned || disabled,
         },
         className
       )}
-      onClick={disabled ? undefined : onSelect}
+      onClick={owned || disabled ? undefined : onSelect}
     >
       {children}
     </div>

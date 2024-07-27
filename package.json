@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.1.2",
     "classnames": "^2.5.1",
+    "flowbite": "^2.4.1",
+    "flowbite-react": "^0.10.1",
+    "googleapis": "^140.0.1",
     "lodash-es": "^4.17.21",
     "next": "14.2.5",
     "next-auth": "^4.24.7",

@@ -1,4 +1,7 @@
-import { Seat } from "@/core/seat/types";
+import { TSeat } from "@/core/seat/types";
+
+export const makeId = (row: string, idx: number | number[]) =>
+  [row, Array.isArray(idx) ? idx.join(",") : idx].join("");
 
 export const fullSingleSeatRow = ({
   rowName,
@@ -12,34 +15,34 @@ export const fullSingleSeatRow = ({
   seatIndex: number[];
 }) => {
   const placeholders = placeholderIndexes?.reduce(
-    (acc: Record<string, Seat>, index) => {
-      const idx = index.toString();
+    (acc: Record<string, TSeat>, index) => {
+      const idx = index;
+      const id = makeId(rowName, index);
       const seatInfo = {
-        id: [rowName, index].join(""),
+        rowName,
+        id,
         idx: idx,
-        name: idx,
-        isVip: false,
-        isPlaceholder: true,
+        name: "",
+        type: "placeholder" as const,
       };
 
-      acc[idx] = seatInfo;
+      acc[id] = seatInfo;
 
       return acc;
     },
     {}
   );
 
-  const seats = seatIndex.reduce((acc: Record<string, Seat>, _idx) => {
-    const idx = _idx.toString();
-    const name = (_idx + 1).toString();
-
+  const seats = seatIndex.reduce((acc: Record<string, TSeat>, idx) => {
+    const id = makeId(rowName, idx + 1);
     const seatInfo = {
-      id: [rowName, name].join(""),
+      rowName,
+      id,
       idx,
-      name,
-      isVip: vipIndex?.includes(_idx) ?? false,
+      name: [rowName, idx + 1].join(""),
+      type: vipIndex?.includes(idx) ? ("vip" as const) : ("normal" as const),
     };
-    acc[idx] = seatInfo;
+    acc[id] = seatInfo;
 
     return acc;
   }, {});
@@ -57,33 +60,35 @@ export const fullCoupleSeatRow = ({
   seatIndex: number[];
 }) => {
   const placeholders = placeholderIndexes?.reduce(
-    (acc: Record<string, Seat>, index) => {
-      const idx = index.toString();
+    (acc: Record<string, TSeat>, idx) => {
+      const id = makeId(rowName, idx + 1);
       const seatInfo = {
-        id: [rowName, index].join(""),
+        rowName,
+        id,
         idx: idx,
-        name: idx,
-        isVip: false,
-        isPlaceholder: true,
+        name: "",
+        type: "placeholder" as const,
       };
 
-      acc[idx] = seatInfo;
+      acc[id] = seatInfo;
 
       return acc;
     },
     {}
   );
-  const seats = seatIndex.reduce((acc: Record<string, Seat>, index) => {
-    const idxs = [index, index + 1].map(String);
+  const seats = seatIndex.reduce((acc: Record<string, TSeat>, index) => {
+    const idxs = [index, index + 1];
+    const id = makeId(rowName, idxs);
 
     const seatInfo = {
-      id: [rowName, idxs.join(",")].join(""),
+      rowName,
+      id,
       idx: idxs,
-      name: idxs.join(","),
-      isVip: false,
+      name: idxs.map((idx) => [rowName, idx].join("")).join(", "),
+      type: "multiple" as const,
     };
 
-    acc[index.toString()] = seatInfo;
+    acc[id] = seatInfo;
 
     return acc;
   }, {});

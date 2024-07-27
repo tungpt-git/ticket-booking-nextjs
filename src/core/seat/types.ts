@@ -1,7 +1,7 @@
-export type Seat = {
+export type TSeat = {
   id: string;
-  idx: string | string[];
+  idx: number | number[];
   name: string;
-  type: "normal" | "vip";
-  isPlaceholder?: boolean;
+  type: "normal" | "vip" | "placeholder" | "multiple";
+  rowName: string;
 };
