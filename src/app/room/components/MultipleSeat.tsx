@@ -29,7 +29,7 @@ export const MultipleSeat = ({
             !(owned || selected) && !disabled,
           "bg-secondary text-white owned": owned || selected,
           "cursor-pointer": !owned && !disabled,
-          "border-neutral bg-neutral text-neutral": disabled,
+          "border-neutral-500 bg-neutral-500 text-neutral-500": disabled,
           "cursor-not-allowed opacity-30": owned || disabled,
         }
       )}

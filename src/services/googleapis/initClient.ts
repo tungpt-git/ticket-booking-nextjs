@@ -7,7 +7,7 @@ import {
 } from "@/configs/google-api";
 import { google } from "googleapis";
 
-export async function getClient() {
+export async function initClient() {
   const glAuth = await google.auth.getClient({
     projectId: GOOGLE_API_PROJECT_ID,
     credentials: {

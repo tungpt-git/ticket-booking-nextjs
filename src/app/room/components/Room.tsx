@@ -1,18 +1,23 @@
 "use client";
 import React, { Fragment, useState } from "react";
+import groupBy from "lodash-es/groupBy";
+import orderBy from "lodash-es/orderBy";
+import { Card } from "flowbite-react";
+//
 import { SeatLabel } from "./SeatLabel";
 import { SingleSeat } from "./SingleSeat";
 import { MultipleSeat } from "./MultipleSeat";
 import { PlaceHolderSeat } from "./PlaceHolderSeat";
+import { TotalPrice } from "./TotalPrice";
+import { PaymentInfo } from "./PaymentInfo";
+//
 import {
   fullCoupleSeatRow,
   fullSingleSeatRow,
 } from "@/core/helpers/generateSeats";
 import { TSeat } from "@/core/seat/types";
-import groupBy from "lodash-es/groupBy";
+//
 import Button from "@/app/components/Button";
-import { Card } from "flowbite-react";
-import { orderBy } from "lodash-es";
 
 const slotCount = 17;
 
@@ -60,14 +65,18 @@ const allSeats = {
   }),
 };
 
-export function Room() {
+type Props = {
+  onPayment?(selectedSeat: TSeat[]): void;
+};
+
+export function Room({ onPayment }: Props) {
   const rows = groupBy(allSeats, (x) => x.rowName);
-  console.log(rows);
 
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
-  const disabledSeat: TSeat["id"][] = ["A1", "I1,2"];
   const [selectedSeat, setSelectedSeat] = useState<TSeat[]>([]);
-  const ownedSeat = ["A17"];
+
+  const disabledSeat: TSeat["id"][] = []; // TODO: fetch from api
+  const ownedSeat: TSeat["id"][] = []; // TODO: fetch from api
 
   const isSelectedSeat = (seat: TSeat) =>
     selectedSeat.some((el) => el.id === seat.id);
@@ -80,6 +89,11 @@ export function Room() {
     );
   };
   const seatGroupByType = groupBy(selectedSeat, (el) => el.type);
+
+  const handlePayment = () => {
+    console.log(selectedSeat);
+    onPayment?.(selectedSeat);
+  };
 
   return (
     <main>
@@ -101,13 +115,16 @@ export function Room() {
                       <Seat
                         key={seat.id}
                         seat={seat}
-                        selected={
-                          (!previewType || previewType === seat.type) &&
-                          isSelectedSeat(seat)
-                        }
+                        selected={isSelectedSeat(seat)}
                         onSelect={() => onSelect(seat)}
                         disabled={disabledSeat.includes(seat.id)}
-                        owned={ownedSeat.includes(seat.id)}
+                        owned={
+                          Boolean(
+                            previewType &&
+                              previewType !== seat.type &&
+                              isSelectedSeat(seat)
+                          ) || ownedSeat.includes(seat.id)
+                        }
                       />
                     );
                   })}
@@ -136,8 +153,9 @@ export function Room() {
                   />
                 );
               })}
+              {selectedSeat.length > 0 && <TotalPrice seats={selectedSeat} />}
             </div>
-            <Button rounded className="w-full mt-auto">
+            <Button rounded className="w-full mt-auto" onClick={handlePayment}>
               Thanh toán
             </Button>
           </Card>
@@ -146,53 +164,6 @@ export function Room() {
     </main>
   );
 }
-
-const PaymentInfo = ({
-  count,
-  type,
-  seats,
-  onClick,
-  onMouseEnter,
-  onMouseLeave,
-}: {
-  count: number;
-  type: TSeat["type"];
-  seats: TSeat[];
-  onClick?: React.MouseEventHandler<HTMLDivElement>;
-  onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
-  onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
-}) => {
-  const labelLookup: Partial<Record<TSeat["type"], string>> = {
-    normal: "Ghế thường",
-    vip: "Ghế Vip",
-    multiple: "Ghế đôi",
-  };
-
-  const typeLabel = labelLookup[type];
-  const seatLabel = seats.map((el) => el.name).join(", ");
-
-  return (
-    <div
-      className="flex justify-between items-center border-b p-2 -mx-2 rounded cursor-pointer hover:bg-gray-300/30 hover:border-b-0"
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <div>
-        <div>
-          {count}x {typeLabel}
-        </div>
-        <div
-          className="text-ellipsis overflow-hidden whitespace-nowrap max-w-[230px] text-sm text-neutral-500"
-          title={seatLabel}
-        >
-          {seatLabel}
-        </div>
-      </div>
-      <div className="flex justify-between ">210.000 VNĐ</div>
-    </div>
-  );
-};
 
 const Seat = ({
   seat,
