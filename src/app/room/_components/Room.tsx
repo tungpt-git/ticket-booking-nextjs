@@ -17,7 +17,7 @@ import {
 } from "@/core/helpers/generateSeats";
 import { TSeat } from "@/core/seat/types";
 //
-import Button from "@/app/components/Button";
+import Button from "@/app/_components/Button";
 
 const slotCount = 17;
 

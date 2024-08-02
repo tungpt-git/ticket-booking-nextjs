@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { TSeat } from "@/core/seat/types";
+import { labelLookup, TSeat } from "@/core/seat/types";
 import { formatPrice, getSeatPrice } from "@/core/seat/price";
 
 export const PaymentInfo = ({
@@ -18,12 +18,6 @@ export const PaymentInfo = ({
   onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
   onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
 }) => {
-  const labelLookup: Partial<Record<TSeat["type"], string>> = {
-    normal: "Ghế thường",
-    vip: "Ghế Vip",
-    multiple: "Ghế đôi",
-  };
-
   const typeLabel = labelLookup[type];
   const seatLabel = seats.map((el) => el.name).join(", ");
 

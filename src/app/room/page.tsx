@@ -1,7 +1,7 @@
-import { Room } from "./components/Room";
+import { Room } from "./_components/Room";
 import { type ReactElement } from "react";
 import { TSeat } from "@/core/seat/types";
-import { booking } from "@/services/seats";
+import { booking } from "@/services/seats/booking";
 
 const onPayment = async (seats: TSeat[]) => {
   "use server";

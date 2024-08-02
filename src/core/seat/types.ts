@@ -5,3 +5,9 @@ export type TSeat = {
   type: "normal" | "vip" | "placeholder" | "multiple";
   rowName: string;
 };
+
+export const labelLookup: Partial<Record<TSeat["type"], string>> = {
+  normal: "Ghế thường",
+  vip: "Ghế VIP",
+  multiple: "Ghế đôi",
+};

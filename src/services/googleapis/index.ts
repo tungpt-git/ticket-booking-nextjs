@@ -3,11 +3,11 @@
 import { append } from "./append";
 import { initClient } from "./initClient";
 
-export const googleServices = {
+export const googleServices = Object.freeze({
   client: initClient,
   append,
-};
+});
 
 export const useGoogleServices = () => {
-  return googleServices
+  return googleServices;
 };
