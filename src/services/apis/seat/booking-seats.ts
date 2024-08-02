@@ -21,7 +21,7 @@ export const bookingSeats = ({
     range: "A1:D1",
     valueInputOption: "USER_ENTERED",
     requestBody: {
-      values: [[name, phone, email, count, seatLabels, notes]],
+      values: [[name, phone, email, seatLabels, count, notes]],
     },
   });
 };

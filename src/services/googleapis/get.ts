@@ -1,19 +1,17 @@
-"use server";
-
 import { google, sheets_v4 } from "googleapis";
 import { initClient } from "./init-client";
 import { GOOGLE_SHEET_ID } from "@/configs/google-api";
 
-export async function append(
-  params: sheets_v4.Params$Resource$Spreadsheets$Values$Append
-) {
+export const get = async (
+  params: sheets_v4.Params$Resource$Spreadsheets$Values$Get
+) => {
   const client = await initClient();
   const sheets = google.sheets({ version: "v4", auth: client });
 
-  const data = await sheets.spreadsheets.values.append({
+  const data = await sheets.spreadsheets.values.get({
     ...params,
     spreadsheetId: GOOGLE_SHEET_ID,
   });
 
   return data;
-}
+};

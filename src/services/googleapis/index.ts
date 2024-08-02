@@ -1,11 +1,13 @@
 /* eslint-disable import/no-anonymous-default-export */
 
 import { append } from "./append";
-import { initClient } from "./initClient";
+import { get } from "./get";
+import { initClient } from "./init-client";
 
 export const googleServices = Object.freeze({
   client: initClient,
   append,
+  get,
 });
 
 export const useGoogleServices = () => {

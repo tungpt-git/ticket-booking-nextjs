@@ -1,13 +1,15 @@
 import { Room } from "./_components/Room";
 import { type ReactElement } from "react";
 import { TSeat } from "@/core/seat/types";
-import { booking } from "@/services/seats/booking";
+import { seatSevices } from "@/services/seats";
 
 const onPayment = async (seats: TSeat[]) => {
   "use server";
-  booking(seats);
+  seatSevices.booking(seats);
 };
 
 export default async function Home(): Promise<ReactElement> {
-  return <Room onPayment={onPayment} />;
+  const bookedSeats = await seatSevices.getAllBooking();
+  console.log(bookedSeats);
+  return <Room onPayment={onPayment} bookedSeats={bookedSeats} />;
 }

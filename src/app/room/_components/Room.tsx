@@ -11,72 +11,32 @@ import { PlaceHolderSeat } from "./PlaceHolderSeat";
 import { TotalPrice } from "./TotalPrice";
 import { PaymentInfo } from "./PaymentInfo";
 //
-import {
-  fullCoupleSeatRow,
-  fullSingleSeatRow,
-} from "@/core/helpers/generateSeats";
-import { TSeat } from "@/core/seat/types";
+import { type TSeat } from "@/core/seat/types";
+import { allSeats, slotCount } from "@/core/seat";
+import { TUser } from "@/core/user/type";
 //
 import Button from "@/app/_components/Button";
 
-const slotCount = 17;
-
-const allSeats = {
-  ...fullSingleSeatRow({
-    rowName: "A",
-    seatIndex: Array.from({ length: slotCount }).map((_, idx) => idx),
-  }),
-  ...fullSingleSeatRow({
-    rowName: "B",
-    seatIndex: Array.from({ length: slotCount }).map((_, idx) => idx),
-  }),
-  ...fullSingleSeatRow({
-    rowName: "C",
-    seatIndex: Array.from({ length: slotCount }).map((_, idx) => idx),
-  }),
-  ...fullSingleSeatRow({
-    rowName: "D",
-    seatIndex: Array.from({ length: slotCount }).map((_, idx) => idx),
-  }),
-  ...fullSingleSeatRow({
-    rowName: "E",
-    seatIndex: Array.from({ length: slotCount }).map((_, idx) => idx),
-    vipIndex: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-  }),
-  ...fullSingleSeatRow({
-    rowName: "F",
-    seatIndex: Array.from({ length: slotCount }).map((_, idx) => idx),
-    vipIndex: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-  }),
-  ...fullSingleSeatRow({
-    rowName: "G",
-    seatIndex: Array.from({ length: slotCount }).map((_, idx) => idx),
-    vipIndex: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-  }),
-  ...fullSingleSeatRow({
-    rowName: "H",
-    seatIndex: Array.from({ length: slotCount }).map((_, idx) => idx),
-    vipIndex: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
-  }),
-  ...fullCoupleSeatRow({
-    rowName: "I",
-    seatIndex: [1, 3, 5, 7, 9, 11, 13],
-    placeholderIndexes: [0, 15, 16],
-  }),
-};
+const currentUser = "john.doe@gmail.com";
 
 type Props = {
   onPayment?(selectedSeat: TSeat[]): void;
+  bookedSeats?: Array<TSeat & { user: TUser }>;
 };
 
-export function Room({ onPayment }: Props) {
+export function Room({ onPayment, bookedSeats = [] }: Props) {
   const rows = groupBy(allSeats, (x) => x.rowName);
 
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<TSeat[]>([]);
 
-  const disabledSeat: TSeat["id"][] = []; // TODO: fetch from api
-  const ownedSeat: TSeat["id"][] = []; // TODO: fetch from api
+  const disabledSeat = bookedSeats
+    .filter((seat) => seat.user.email !== currentUser)
+    ?.map((seat) => seat.id);
+
+  const ownedSeat = bookedSeats
+    .filter((seat) => seat.user.email === currentUser)
+    .map((seat) => seat.id);
 
   const isSelectedSeat = (seat: TSeat) =>
     selectedSeat.some((el) => el.id === seat.id);

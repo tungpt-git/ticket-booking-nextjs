@@ -1,5 +1,5 @@
 import groupBy from "lodash-es/groupBy";
-import { bookingSeats } from "../apis/seat/bookingSeats";
+import { bookingSeats } from "../apis/seat/booking-seats";
 import { TSeatService } from "../port";
 import { labelLookup, TSeat } from "@/core/seat/types";
 
@@ -22,7 +22,7 @@ export const booking: TSeatService["booking"] = async (seats) => {
     email: "john.doe@gmail.com",
     phone: "0986984353",
     count: seats.length,
-    seatLabels: seats.map((seat) => seat.name).join(", "),
+    seatLabels: seats.map((seat) => seat.id).join(" - "),
     notes,
   });
 };
