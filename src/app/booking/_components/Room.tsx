@@ -115,7 +115,7 @@ export function Room({ onPayment, bookedSeats = [] }: Props) {
               {selectedSeat.length > 0 && <TotalPrice seats={selectedSeat} />}
             </div>
             <Button rounded className="w-full mt-auto" onClick={handlePayment}>
-              <span>Thanh toán</span>
+              Thanh toán
             </Button>
           </Card>
         </div>
