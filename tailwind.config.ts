@@ -30,11 +30,6 @@ const config: Config = {
           DEFAULT: "#10B981",
           dark: "#047857",
         },
-        // neutral: {
-        //   light: "#D1D5DB",
-        //   DEFAULT: "#6B7280",
-        //   dark: "#374151",
-        // },
         info: {
           light: "#93C5FD",
           DEFAULT: "#3B82F6",
@@ -55,9 +50,24 @@ const config: Config = {
           DEFAULT: "#EF4444",
           dark: "#B91C1C",
         },
+        seat: {
+          normal: {
+            DEFAULT: "#737373",
+            selected: "#3B82F6",
+          },
+          vip: {
+            DEFAULT: "#F59E0B",
+            selected: "#3B82F6",
+          },
+          multiple: {
+            DEFAULT: "#D946EF",
+            selected: "#3B82F6",
+          },
+          disabled: "#737373",
+        },
       },
     },
   },
-  plugins: [require("flowbite/plugin")],
+  plugins: [require("daisyui")],
 };
 export default config;

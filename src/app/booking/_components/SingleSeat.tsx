@@ -22,24 +22,25 @@ export const SingleSeat = ({
   return (
     <div
       className={classNames(
-        "border-2 border-solid border-neutral-500 rounded w-10 h-10 transition-all",
+        "border-2 border-solid border-seat-normal rounded w-10 h-10 transition-all",
         {
           "hover:bg-opacity-30": !(owned || selected) && !disabled,
           //
-          "bg-primary !border-primary":
+          "bg-seat-normal-selected !border-seat-normal-selected":
             (owned || selected) && variant === "normal" && !disabled,
-          "hover:bg-primary hover:border-primary text-neutral-500 hover:text-primary":
+          "hover:bg-seat-normal-selected hover:border-seat-normal-selected text-seat-normal hover:text-seat-normal-selected":
             !(owned || selected) && variant === "normal" && !disabled,
           //
-          "!border-warning text-warning": variant === "vip" && !disabled,
-          "bg-warning": (owned || selected) && variant === "vip",
-          "hover:bg-warning":
+          "border-seat-vip text-seat-vip": variant === "vip" && !disabled,
+          "border-seat-vip-selected bg-seat-vip-selected":
+            (owned || selected) && variant === "vip",
+          "hover:bg-seat-vip":
             !(owned || selected) && variant === "vip" && !disabled,
           //
           "!text-white": owned || selected,
           //
           "cursor-pointer": !owned && !disabled,
-          "border-neutral-500 bg-neutral-500 text-neutral-500": disabled,
+          "border-seat-normal bg-seat-normal text-seat-normal": disabled,
           "cursor-not-allowed opacity-30": owned || disabled,
         },
         className

@@ -2,7 +2,7 @@
 import React, { Fragment, useState } from "react";
 import groupBy from "lodash-es/groupBy";
 import orderBy from "lodash-es/orderBy";
-import { Card } from "flowbite-react";
+import delay from "lodash-es/delay";
 //
 import { SeatLabel } from "./SeatLabel";
 import { SingleSeat } from "./SingleSeat";
@@ -10,6 +10,7 @@ import { MultipleSeat } from "./MultipleSeat";
 import { PlaceHolderSeat } from "./PlaceHolderSeat";
 import { TotalPrice } from "./TotalPrice";
 import { PaymentInfo } from "./PaymentInfo";
+import { SeatLengend } from "./SeatLengend";
 //
 import { type TSeat } from "@/core/seat/types";
 import { allSeats, slotCount } from "@/core/seat";
@@ -17,15 +18,16 @@ import { TUser } from "@/core/user/type";
 //
 import Button from "@/app/_components/Button";
 
+const rows = groupBy(allSeats, (x) => x.rowName);
 const currentUser = "john.doe@gmail.com";
 
 type Props = {
-  onPayment?(selectedSeat: TSeat[]): void;
+  onPayment?(selectedSeat: TSeat[]): Promise<void>;
   bookedSeats?: Array<TSeat & { user: TUser }>;
 };
 
 export function Room({ onPayment, bookedSeats = [] }: Props) {
-  const rows = groupBy(allSeats, (x) => x.rowName);
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<TSeat[]>([]);
@@ -50,8 +52,16 @@ export function Room({ onPayment, bookedSeats = [] }: Props) {
   };
   const seatGroupByType = groupBy(selectedSeat, (el) => el.type);
 
-  const handlePayment = () => {
-    onPayment?.(selectedSeat);
+  const handlePayment = async () => {
+    try {
+      setPaymentLoading(true);
+      await onPayment?.(selectedSeat);
+      delay(() => {}, 300);
+
+      setSelectedSeat([]);
+    } finally {
+      setPaymentLoading(false);
+    }
   };
 
   return (
@@ -61,38 +71,68 @@ export function Room({ onPayment, bookedSeats = [] }: Props) {
         className="flex min-h-screen flex-col items-center gap-2 p-24"
       >
         <div className="flex gap-12">
-          <div className="flex flex-col items-center gap-2 self-center p-6">
-            {Object.keys(rows).map((row) => (
-              <Fragment key={row}>
-                <div className="flex items-center gap-2 justify-between">
-                  {Array.from({ length: slotCount }).map((_, idx) => {
-                    const seat = orderBy(rows[row], (x) =>
-                      Array.isArray(x.idx) ? x.idx[0] : x.idx
-                    )[idx];
-                    if (!seat) return null;
-                    return (
-                      <Seat
-                        key={seat.id}
-                        seat={seat}
-                        selected={isSelectedSeat(seat)}
-                        onSelect={() => onSelect(seat)}
-                        disabled={disabledSeat.includes(seat.id)}
-                        owned={
-                          Boolean(
-                            previewType &&
-                              previewType !== seat.type &&
-                              isSelectedSeat(seat)
-                          ) || ownedSeat.includes(seat.id)
-                        }
-                      />
-                    );
-                  })}
-                </div>
-              </Fragment>
-            ))}
+          <div>
+            <div className="flex flex-col items-center gap-2 self-center p-6">
+              {Object.keys(rows).map((row) => (
+                <Fragment key={row}>
+                  <div className="flex items-center gap-2 justify-between">
+                    {Array.from({ length: slotCount }).map((_, idx) => {
+                      const seat = orderBy(rows[row], (x) =>
+                        Array.isArray(x.idx) ? x.idx[0] : x.idx
+                      )[idx];
+                      if (!seat) return null;
+                      return (
+                        <Seat
+                          key={seat.id}
+                          seat={seat}
+                          selected={isSelectedSeat(seat)}
+                          onSelect={() => onSelect(seat)}
+                          disabled={disabledSeat.includes(seat.id)}
+                          owned={
+                            Boolean(
+                              previewType &&
+                                previewType !== seat.type &&
+                                isSelectedSeat(seat)
+                            ) || ownedSeat.includes(seat.id)
+                          }
+                        />
+                      );
+                    })}
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-2">
+                {(["normal", "vip", "multiple"] as TSeat["type"][]).map(
+                  (type) => (
+                    <SeatLengend key={type} type={type} showLabel />
+                  )
+                )}
+              </div>
+              <SeatLengend
+                type={"normal"}
+                selected
+                showLabel
+                label="Ghế đang chọn"
+              />
+              <SeatLengend
+                type={"normal"}
+                disabled
+                showLabel
+                label="Ghế đã bán"
+              />
+              <SeatLengend
+                type={"normal"}
+                owned
+                showLabel
+                label="Ghế đã sở hữu"
+              />
+            </div>
           </div>
-          <Card className="w-[400px] bg-gray-50">
-            <div className="h-full">
+
+          <div className="flex flex-col justify-between bg-gray-50 rounded-xl p-6 shadow-inherit min-w-[400px] shrink-0 shadow-2xl">
+            <div>
               <h3 className="text-xl font-medium uppercase mb-2">
                 Thông tin vé
               </h3>
@@ -114,10 +154,15 @@ export function Room({ onPayment, bookedSeats = [] }: Props) {
               })}
               {selectedSeat.length > 0 && <TotalPrice seats={selectedSeat} />}
             </div>
-            <Button rounded className="w-full mt-auto" onClick={handlePayment}>
+            <Button
+              rounded
+              className="w-full mt-auto"
+              onClick={handlePayment}
+              loading={paymentLoading}
+            >
               Thanh toán
             </Button>
-          </Card>
+          </div>
         </div>
       </section>
     </main>

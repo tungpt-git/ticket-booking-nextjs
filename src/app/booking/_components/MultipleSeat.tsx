@@ -24,10 +24,11 @@ export const MultipleSeat = ({
       className={classNames(
         "border-2 border-solid h-10 rounded transition-all",
         {
-          "hover:bg-secondary border-secondary": !disabled,
-          "hover:bg-opacity-30 text-secondary":
+          "hover:bg-seat-multiple border-seat-multiple": !disabled,
+          "hover:bg-opacity-30 text-seat-multiple":
             !(owned || selected) && !disabled,
-          "bg-secondary text-white owned": owned || selected,
+          "border-seat-multiple-selected hover:bg-seat-multiple-selected bg-seat-multiple-selected text-white owned":
+            owned || selected,
           "cursor-pointer": !owned && !disabled,
           "border-neutral-500 bg-neutral-500 text-neutral-500": disabled,
           "cursor-not-allowed opacity-30": owned || disabled,
