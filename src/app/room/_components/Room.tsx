@@ -51,7 +51,6 @@ export function Room({ onPayment, bookedSeats = [] }: Props) {
   const seatGroupByType = groupBy(selectedSeat, (el) => el.type);
 
   const handlePayment = () => {
-    console.log(selectedSeat);
     onPayment?.(selectedSeat);
   };
 
@@ -116,7 +115,7 @@ export function Room({ onPayment, bookedSeats = [] }: Props) {
               {selectedSeat.length > 0 && <TotalPrice seats={selectedSeat} />}
             </div>
             <Button rounded className="w-full mt-auto" onClick={handlePayment}>
-              Thanh toán
+              <span>Thanh toán</span>
             </Button>
           </Card>
         </div>

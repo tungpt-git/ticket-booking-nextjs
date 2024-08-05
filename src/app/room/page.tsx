@@ -10,6 +10,5 @@ const onPayment = async (seats: TSeat[]) => {
 
 export default async function Home(): Promise<ReactElement> {
   const bookedSeats = await seatSevices.getAllBooking();
-  console.log(bookedSeats);
   return <Room onPayment={onPayment} bookedSeats={bookedSeats} />;
 }
