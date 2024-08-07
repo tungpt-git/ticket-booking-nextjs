@@ -1,3 +1,4 @@
+"use client";
 import classNames from "classnames";
 import React from "react";
 
@@ -21,7 +22,7 @@ type Props = {
   loading?: boolean;
 };
 
-export default function Button1({
+export default function Button({
   variant = "primary",
   rounded,
   loading = false,

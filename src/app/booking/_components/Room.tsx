@@ -16,7 +16,8 @@ import { type TSeat } from "@/core/seat/types";
 import { allSeats, slotCount } from "@/core/seat";
 import { TUser } from "@/core/user/type";
 //
-import Button from "@/app/_components/Button";
+import Button from "@/components/Button";
+import { signIn, useSession } from "next-auth/react";
 
 const rows = groupBy(allSeats, (x) => x.rowName);
 const currentUser = "john.doe@gmail.com";
@@ -27,6 +28,7 @@ type Props = {
 };
 
 export function Room({ onPayment, bookedSeats = [] }: Props) {
+  const { data: session, status } = useSession();
   const [paymentLoading, setPaymentLoading] = useState(false);
 
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
@@ -154,14 +156,27 @@ export function Room({ onPayment, bookedSeats = [] }: Props) {
               })}
               {selectedSeat.length > 0 && <TotalPrice seats={selectedSeat} />}
             </div>
-            <Button
-              rounded
-              className="w-full mt-auto"
-              onClick={handlePayment}
-              loading={paymentLoading}
-            >
-              Thanh toán
-            </Button>
+
+            {!session ? (
+              <Button
+                rounded
+                className="w-full mt-auto"
+                loading={status === "loading"}
+                onClick={() => signIn("google", { redirectTo: "/" })}
+                variant="cyan"
+              >
+                Sign in with Google
+              </Button>
+            ) : (
+              <Button
+                rounded
+                className="w-full mt-auto"
+                onClick={handlePayment}
+                loading={paymentLoading}
+              >
+                Thanh toán
+              </Button>
+            )}
           </div>
         </div>
       </section>
