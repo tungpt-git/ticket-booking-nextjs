@@ -66,6 +66,15 @@ const config: Config = {
           disabled: "#737373",
         },
       },
+      keyframes: {
+        "self-spin": {
+          from: { transform: "rotateY(0deg)" },
+          to: { transform: "rotateY(-360deg)" },
+        },
+      },
+      animation: {
+        "self-spin": "self-spin 2.5s linear infinite",
+      },
     },
   },
   plugins: [require("daisyui")],
