@@ -1,13 +1,15 @@
-import { Room } from "./sections/Room";
-import { type ReactElement } from "react";
-import { TSeat } from "@/core/seat/types";
-import { seatSevices } from "@/services/seats";
+import React, { type ReactElement } from "react";
 import { revalidateTag } from "next/cache";
+
+import { seatSevices } from "@/services/seats";
 import { GET_ALL_BOOKINGS } from "@/services/apis/seat/get-all-booking";
-import { Button, GoogleSignInButton } from "@/components";
+import { upload } from "@/services/googleapis/upload";
+
 import { auth, signOut } from "@/core/auth";
+
+import { Button, GoogleSignInButton } from "@/components";
+
 import { Booking } from "./sections/Booking";
-import { Session } from "next-auth";
 
 const IconLogout = () => (
   <svg
@@ -24,19 +26,40 @@ const IconLogout = () => (
   </svg>
 );
 
-export default async function BooingPage(): Promise<ReactElement> {
+export default async function BookingPage(): Promise<ReactElement> {
   const bookedSeats = await seatSevices.getAllBooking();
   const session = await auth();
 
-  const onPayment = async (seats: TSeat[]) => {
+  const onPayment: React.ComponentProps<typeof Booking>["onPayment"] = async (
+    seats,
+    name,
+    email,
+    phone,
+    bill
+  ) => {
     "use server";
-    console.log(session);
-    await seatSevices.booking(seats, {
-      name: session?.user?.name ?? "",
-      email: session?.user?.email ?? "",
-      phone: "",
-    });
-    revalidateTag(GET_ALL_BOOKINGS);
+    const file = bill.get("file") as File;
+    let fileId: string = "";
+    try {
+      if (file) {
+        fileId = (await upload(file)) ?? "";
+      }
+
+      await seatSevices.booking(
+        seats,
+        {
+          name,
+          email,
+          phone,
+        },
+        fileId
+          ? `=IMAGE("https://drive.google.com/thumbnail?id=${fileId}&sz=w1000")`
+          : ""
+      );
+      revalidateTag(GET_ALL_BOOKINGS);
+    } catch {
+      // do nothing
+    }
   };
 
   return (

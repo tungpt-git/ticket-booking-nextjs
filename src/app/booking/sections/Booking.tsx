@@ -1,30 +1,56 @@
 "use client";
-import React, { useState } from "react";
-//
-import delay from "lodash-es/delay";
+import React, { useEffect, useState } from "react";
 //
 import { type TSeat } from "@/core/seat/types";
 import { TUser } from "@/core/user/type";
 //
 import { Room } from "./Room";
-import { Payment } from "./Payment";
+import { type TUserForm, Payment } from "./Payment";
 
 type Props = {
-  onPayment?(selectedSeat: TSeat[]): Promise<void>;
+  onPayment?(
+    selectedSeat: TSeat[],
+    name: TUser["name"],
+    email: TUser["email"],
+    phone: TUser["phone"],
+    bill: FormData
+  ): Promise<void>;
   bookedSeats?: Array<TSeat & { user: TUser }>;
   signInComponent: React.ReactNode;
 };
 
-export function Booking({ onPayment, bookedSeats = [] }: Props) {
+export function Booking({ onPayment, bookedSeats: _bookedSeats = [] }: Props) {
+  const [bookedSeats, setBookedSeats] = useState(_bookedSeats);
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<TSeat[]>([]);
 
-  const handlePayment = async () => {
-    await onPayment?.(selectedSeat);
-    delay(() => {}, 300);
-
+  const handlePayment = async (data: TUserForm) => {
+    if (!selectedSeat.length) return;
+    const billData = new FormData();
+    billData.append("file", data.bill);
+    await onPayment?.(
+      selectedSeat,
+      data.name,
+      data.email,
+      data.phone,
+      billData
+    );
+    setBookedSeats((prev) => [
+      ...prev,
+      ...selectedSeat.map((seat) => ({
+        ...seat,
+        user: data,
+      })),
+    ]);
     setSelectedSeat([]);
   };
+
+  useEffect(
+    function sync() {
+      setBookedSeats(bookedSeats);
+    },
+    [bookedSeats]
+  );
 
   return (
     <main>
@@ -39,7 +65,6 @@ export function Booking({ onPayment, bookedSeats = [] }: Props) {
 
           <Payment
             selectedSeat={selectedSeat}
-            setSelectedSeat={setSelectedSeat}
             setPreviewType={setPreviewType}
             onPayment={handlePayment}
           />

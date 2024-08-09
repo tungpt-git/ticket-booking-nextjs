@@ -18,7 +18,10 @@ export async function initClient() {
       client_email: GOOGLE_API_CLIENT_EMAIL,
       universe_domain: "googleapis.com",
     },
-    scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    scopes: [
+      "https://www.googleapis.com/auth/spreadsheets",
+      "https://www.googleapis.com/auth/drive",
+    ],
   });
 
   return glAuth;
