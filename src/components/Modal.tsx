@@ -1,29 +1,36 @@
-import { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useId } from "react";
 import classNames from "classnames";
 
 type Props = PropsWithChildren<{
   open?: boolean;
   title?: React.ReactNode;
-}>;
+  onClose?: VoidFunction;
+}> &
+  Pick<React.ComponentProps<"dialog">, "className">;
 
-export const Modal = ({ open, title, children }: Props) => {
+export const Modal = ({ open, title, children, className, onClose }: Props) => {
+  const id = useId();
   return (
-    <div
+    <dialog
+      id={id}
       className={classNames("modal", {
         "modal-open": open,
       })}
       role="dialog"
     >
-      <div className="modal-box">
+      <div className={classNames("modal-box", className)}>
         {typeof title === "string" ? <Title>{title}</Title> : title}
         {children}
       </div>
-    </div>
+      <label className="modal-backdrop" htmlFor={id} onClick={onClose}>
+        Close
+      </label>
+    </dialog>
   );
 };
 
 const Title = ({ children }: PropsWithChildren) => (
-  <h3 className="text-lg font-bold">{children}</h3>
+  <h3 className="font-medium text-2xl">{children}</h3>
 );
 
 const Body = ({ children }: PropsWithChildren) => (

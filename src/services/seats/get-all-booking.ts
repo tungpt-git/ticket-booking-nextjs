@@ -1,5 +1,5 @@
 import { allSeats } from "@/core/seat";
-import { getAllBooking as getAllBookingAPI } from "../apis/seat/get-all-booking";
+import { getAllBooking as getAllBookingAPI } from "../apis/booking/get-all-booking";
 import { TSeat } from "@/core/seat/types";
 import { TUser } from "@/core/user/type";
 import { TSeatService } from "../port";

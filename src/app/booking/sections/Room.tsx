@@ -1,5 +1,6 @@
 "use client";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
+import { useSession } from "next-auth/react";
 //
 import groupBy from "lodash-es/groupBy";
 import orderBy from "lodash-es/orderBy";
@@ -11,21 +12,19 @@ import { PlaceHolderSeat } from "../_components/PlaceHolderSeat";
 import { SeatLengend } from "../_components/SeatLengend";
 //
 import { type TSeat } from "@/core/seat/types";
-import { allSeats, slotCount } from "@/core/seat";
+import { slotCount } from "@/core/seat";
 import { TUser } from "@/core/user/type";
-import { useSession } from "next-auth/react";
-//
-
-const rows = groupBy(allSeats, (x) => x.rowName);
 
 type Props = {
-  bookedSeats?: Array<TSeat & { user: TUser }>;
+  bookedSeats?: Array<TSeat & { user?: TUser }>;
   previewType?: TSeat["type"] | null;
   selectedSeat: TSeat[];
   setSelectedSeat: React.Dispatch<React.SetStateAction<TSeat[]>>;
+  seats: Record<TSeat["id"], TSeat>;
 };
 
 export function Room({
+  seats,
   bookedSeats = [],
   previewType,
   selectedSeat,
@@ -34,12 +33,14 @@ export function Room({
   const { data: session } = useSession();
   const currentUser = session?.user?.email ?? "";
   //
+  const rows = groupBy(seats, (x) => x.rowName);
+  //
   const disabledSeat = bookedSeats
-    .filter((seat) => seat.user.email !== currentUser)
+    .filter((seat) => !seat.user || seat.user?.email !== currentUser)
     ?.map((seat) => seat.id);
 
   const ownedSeat = bookedSeats
-    .filter((seat) => seat.user.email === currentUser)
+    .filter((seat) => seat.user && seat.user?.email === currentUser)
     .map((seat) => seat.id);
 
   const isSelectedSeat = (seat: TSeat) =>
@@ -90,15 +91,27 @@ export function Room({
           </Fragment>
         ))}
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-2">
-          {(["normal", "vip", "multiple"] as TSeat["type"][]).map((type) => (
-            <SeatLengend key={type} type={type} showLabel />
-          ))}
+      <div className="flex gap-6">
+        <div>
+          <div className="flex gap-1">
+            <SeatLengend type="normal">
+              <span className="text-[10px]">A</span>
+            </SeatLengend>
+            <SeatLengend type="normal" showLabel label="Ghế 120k">
+              <span className="text-[10px]">B</span>
+            </SeatLengend>
+          </div>
+          <SeatLengend type="normal" showLabel label="Ghế 145k" />
+          <SeatLengend type="vip" showLabel label="Ghế VIP" />
+          <SeatLengend type="multiple" showLabel label="Ghế đôi" />
         </div>
-        <SeatLengend type={"normal"} selected showLabel label="Ghế đang chọn" />
-        <SeatLengend type={"normal"} disabled showLabel label="Ghế đã bán" />
-        <SeatLengend type={"normal"} owned showLabel label="Ghế đã sở hữu" />
+        <div>
+          <SeatLengend type="normal" selected showLabel label="Ghế được chọn" />
+          <SeatLengend type="normal" disabled showLabel label="Ghế đã bán" />
+          {!!currentUser && (
+            <SeatLengend type="normal" owned showLabel label="Ghế đã sở hữu" />
+          )}
+        </div>
       </div>
     </div>
   );

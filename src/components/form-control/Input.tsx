@@ -10,8 +10,8 @@ type Props = {
 export const Input = ({ label, placeholder, required, error, name }: Props) => {
   return (
     <label className="form-control w-full">
-      <div className="label">
-        {!!label && (
+      {!!label && (
+        <div className="label">
           <span
             className={classNames("label-text font-medium", {
               "text-error": !!error,
@@ -20,8 +20,8 @@ export const Input = ({ label, placeholder, required, error, name }: Props) => {
             {label}
             {required && <span className="text-error"> *</span>}
           </span>
-        )}
-      </div>
+        </div>
+      )}
       <input
         required={required}
         name={name}

@@ -15,14 +15,18 @@ type Props = {
     phone: TUser["phone"],
     bill: FormData
   ): Promise<void>;
-  bookedSeats?: Array<TSeat & { user: TUser }>;
-  signInComponent: React.ReactNode;
-};
+  bookedSeats?: Array<TSeat & { user?: TUser }>;
+} & Pick<React.ComponentProps<typeof Room>, "seats">;
 
-export function Booking({ onPayment, bookedSeats: _bookedSeats = [] }: Props) {
+export function Booking({
+  onPayment,
+  bookedSeats: _bookedSeats = [],
+  seats,
+}: Props) {
   const [bookedSeats, setBookedSeats] = useState(_bookedSeats);
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<TSeat[]>([]);
+  const [disabledSelect, setDisabledSelect] = useState(false);
 
   const handlePayment = async (data: TUserForm) => {
     if (!selectedSeat.length) return;
@@ -43,6 +47,7 @@ export function Booking({ onPayment, bookedSeats: _bookedSeats = [] }: Props) {
       })),
     ]);
     setSelectedSeat([]);
+    setDisabledSelect(false);
   };
 
   useEffect(
@@ -57,9 +62,16 @@ export function Booking({ onPayment, bookedSeats: _bookedSeats = [] }: Props) {
       <section id="_seats" className="flex flex-col items-center gap-12 p-24">
         <div className="flex gap-12">
           <Room
-            bookedSeats={bookedSeats}
+            seats={seats}
+            bookedSeats={[
+              ...bookedSeats,
+              ...(disabledSelect ? Object.values(seats) : []),
+            ].filter(
+              (seat) =>
+                !selectedSeat.some((selected) => selected.id === seat.id)
+            )}
             selectedSeat={selectedSeat}
-            setSelectedSeat={setSelectedSeat}
+            setSelectedSeat={disabledSelect ? () => {} : setSelectedSeat}
             previewType={previewType}
           />
 
@@ -67,6 +79,7 @@ export function Booking({ onPayment, bookedSeats: _bookedSeats = [] }: Props) {
             selectedSeat={selectedSeat}
             setPreviewType={setPreviewType}
             onPayment={handlePayment}
+            toggleDisabledAll={setDisabledSelect}
           />
         </div>
       </section>

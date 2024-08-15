@@ -1,5 +1,4 @@
 import { TSeat } from "@/core/seat/types";
-import { PRICE } from "../seat/price";
 
 export const makeId = (row: string, idx: number | number[]) =>
   [row, Array.isArray(idx) ? idx.join(",") : idx].join("");

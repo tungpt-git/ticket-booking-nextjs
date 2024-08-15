@@ -2,7 +2,7 @@ import React, { type ReactElement } from "react";
 import { revalidateTag } from "next/cache";
 
 import { seatSevices } from "@/services/seats";
-import { GET_ALL_BOOKINGS } from "@/services/apis/seat/get-all-booking";
+import { GET_ALL_BOOKINGS } from "@/services/apis/booking/get-all-booking";
 import { upload } from "@/services/googleapis/upload";
 
 import { auth, signOut } from "@/core/auth";
@@ -10,6 +10,7 @@ import { auth, signOut } from "@/core/auth";
 import { Button, GoogleSignInButton } from "@/components";
 
 import { Booking } from "./sections/Booking";
+import { getAll } from "@/services/apis/seat/get-all";
 
 const IconLogout = () => (
   <svg
@@ -28,6 +29,7 @@ const IconLogout = () => (
 
 export default async function BookingPage(): Promise<ReactElement> {
   const bookedSeats = await seatSevices.getAllBooking();
+  const seats = await getAll();
   const session = await auth();
 
   const onPayment: React.ComponentProps<typeof Booking>["onPayment"] = async (
@@ -88,11 +90,7 @@ export default async function BookingPage(): Promise<ReactElement> {
           </form>
         )}
       </div>
-      <Booking
-        onPayment={onPayment}
-        bookedSeats={bookedSeats}
-        signInComponent={<GoogleSignInButton />}
-      />
+      <Booking onPayment={onPayment} bookedSeats={bookedSeats} seats={seats} />
     </div>
   );
 }

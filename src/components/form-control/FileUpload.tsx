@@ -10,7 +10,7 @@ export const FileUpload = ({ className, required, name }: Props) => {
     <input
       type="file"
       name={name}
-      className={classNames("file-input w-full", className)}
+      className={classNames("file-input w-full file-input-bordered", className)}
       required={required}
     />
   );

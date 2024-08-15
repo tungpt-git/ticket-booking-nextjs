@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { labelLookup, TSeat } from "@/core/seat/types";
-import { formatPrice, getSeatPrice } from "@/core/seat/price";
+import { formatPrice, sumPrice } from "@/core/seat/price";
 
 export const PaymentInfo = ({
   count,
@@ -23,7 +23,7 @@ export const PaymentInfo = ({
 
   return (
     <div
-      className="flex justify-between items-center border-b p-2 -mx-2 rounded cursor-pointer hover:bg-gray-300/30 hover:border-b-transparent"
+      className="flex justify-between items-center border-b p-2 -mx-2 rounded cursor-pointer hover:bg-gray-300/30 hover:border-transparent"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
@@ -40,7 +40,7 @@ export const PaymentInfo = ({
         </div>
       </div>
       <div className="flex justify-between ">
-        {formatPrice(count * getSeatPrice({ type }))}
+        {formatPrice(sumPrice(seats))}
       </div>
     </div>
   );

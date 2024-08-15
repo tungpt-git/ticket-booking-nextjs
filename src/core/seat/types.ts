@@ -4,6 +4,7 @@ export type TSeat = {
   name: string;
   type: "normal" | "vip" | "placeholder" | "multiple";
   rowName: string;
+  price?: number;
 };
 
 export const labelLookup: Partial<Record<TSeat["type"], string>> = {
