@@ -62,7 +62,6 @@ export const GoogleSignInButton = (
   useEffect(() => {
     const bc = new BroadcastChannel(BROADCAST_CHANNEL);
     bc.onmessage = (evt) => {
-      console.log(evt);
       if (evt.data === GOOGLE_LOGIN_SUCCESS) {
         window.location.reload();
       }

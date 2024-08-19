@@ -8,8 +8,7 @@ export const getAllBooking: TSeatService["getAllBooking"] = async () => {
   const data = await getAllBookingAPI();
 
   const seatIds = (data.values ?? []).reduce((acc, row) => {
-    const [name, phone, email, idStr, _] = row as [
-      string,
+    const [name, phone, email, idStr] = row as [
       string,
       string,
       string,
@@ -17,7 +16,7 @@ export const getAllBooking: TSeatService["getAllBooking"] = async () => {
       string
     ];
 
-    const seats = idStr.split(" - ").map((id) => ({
+    const seats = idStr.split("\n").map((id) => ({
       ...allSeats[id],
       user: {
         email,

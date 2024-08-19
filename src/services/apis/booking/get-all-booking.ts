@@ -1,12 +1,10 @@
+import { SheetsName } from "@/configs/google-sheets";
 import { googleServices } from "@/services/googleapis";
-import { unstable_cache } from "next/cache";
 
-export const GET_ALL_BOOKINGS = "GET_ALL_BOOKINGS";
-
-export const getAllBooking = unstable_cache(async () => {
+export const getAllBooking = async () => {
   return await googleServices
     .get({
-      range: "Sheet1!A2:X1000",
+      range: `${SheetsName.booking}!B2:E1000`,
     })
     .then((res) => res.data);
-}, [GET_ALL_BOOKINGS]);
+};

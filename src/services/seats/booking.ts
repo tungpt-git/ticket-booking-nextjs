@@ -2,7 +2,7 @@ import groupBy from "lodash-es/groupBy";
 import { bookingSeats } from "../apis/booking/booking-seats";
 import { TSeatService } from "../port";
 import { labelLookup, TSeat } from "@/core/seat/types";
-import { formatPrice, sumPrice } from "@/core/seat/price";
+import { sumPrice } from "@/core/seat/price";
 
 export const booking: TSeatService["booking"] = async (seats, user, bill) => {
   if (!seats.length) return;
@@ -17,17 +17,18 @@ export const booking: TSeatService["booking"] = async (seats, user, bill) => {
         }`
     )
     .join(", ");
-  const totalPrice = formatPrice(sumPrice(seats));
 
-  const notes = `${seatPlainText}\nThành tiền: ${totalPrice}`;
+  const notes = `${seatPlainText}`;
 
-  await bookingSeats({
+  const res = await bookingSeats({
     name: user.name,
     email: user.email,
     phone: user.phone,
     count: seats.length,
-    seatLabels: seats.map((seat) => seat.id).join(" - "),
+    seatLabels: seats.map((seat) => seat.id).join("\n"),
     notes,
     bill,
+    total: sumPrice(seats),
   });
+  console.log("res", res);
 };

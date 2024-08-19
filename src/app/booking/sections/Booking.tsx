@@ -5,40 +5,35 @@ import { type TSeat } from "@/core/seat/types";
 import { TUser } from "@/core/user/type";
 //
 import { Room } from "./Room";
-import { type TUserForm, Payment } from "./Payment";
+import { Payment } from "./Payment";
+import { PaymentComplete, type TUserForm } from "./PaymentComplete";
+//
+import { useServerAction } from "@/utils/hooks/useServerAction";
+import { handlePayment } from "@/services/payment/payment";
 
 type Props = {
-  onPayment?(
-    selectedSeat: TSeat[],
-    name: TUser["name"],
-    email: TUser["email"],
-    phone: TUser["phone"],
-    bill: FormData
-  ): Promise<void>;
   bookedSeats?: Array<TSeat & { user?: TUser }>;
 } & Pick<React.ComponentProps<typeof Room>, "seats">;
 
-export function Booking({
-  onPayment,
-  bookedSeats: _bookedSeats = [],
-  seats,
-}: Props) {
+export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
   const [bookedSeats, setBookedSeats] = useState(_bookedSeats);
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<TSeat[]>([]);
   const [disabledSelect, setDisabledSelect] = useState(false);
+  const [openPaymentModal, setOpenPaymentModal] = useState(false);
 
-  const handlePayment = async (data: TUserForm) => {
+  const [runAction, paymentLoading] = useServerAction(handlePayment);
+
+  const onPayment = async (data: TUserForm) => {
     if (!selectedSeat.length) return;
-    const billData = new FormData();
-    billData.append("file", data.bill);
-    await onPayment?.(
-      selectedSeat,
-      data.name,
-      data.email,
-      data.phone,
-      billData
-    );
+    const formData = new FormData();
+    formData.append("seats", JSON.stringify(selectedSeat));
+    formData.append("bill", data.bill);
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    formData.append("phone", data.phone);
+
+    await runAction?.(formData);
     setBookedSeats((prev) => [
       ...prev,
       ...selectedSeat.map((seat) => ({
@@ -52,6 +47,7 @@ export function Booking({
 
   useEffect(
     function sync() {
+      console.log({ bookedSeats });
       setBookedSeats(bookedSeats);
     },
     [bookedSeats]
@@ -76,10 +72,21 @@ export function Booking({
           />
 
           <Payment
+            loading={paymentLoading}
             selectedSeat={selectedSeat}
             setPreviewType={setPreviewType}
-            onPayment={handlePayment}
-            toggleDisabledAll={setDisabledSelect}
+            onPayment={() => {
+              if (!selectedSeat.length) return;
+              setOpenPaymentModal(true);
+            }}
+          />
+
+          <PaymentComplete
+            open={openPaymentModal}
+            onClose={() => setOpenPaymentModal(false)}
+            onPayment={onPayment}
+            selectedSeat={selectedSeat}
+            setPreviewType={setPreviewType}
           />
         </div>
       </section>
