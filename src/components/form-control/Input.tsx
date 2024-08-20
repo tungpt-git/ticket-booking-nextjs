@@ -6,8 +6,18 @@ type Props = {
   required?: boolean;
   error?: string;
   name: string;
+  value?: string;
+  defaultValue?: string;
 };
-export const Input = ({ label, placeholder, required, error, name }: Props) => {
+export const Input = ({
+  label,
+  placeholder,
+  required,
+  error,
+  name,
+  value,
+  defaultValue,
+}: Props) => {
   return (
     <label className="form-control w-full">
       {!!label && (
@@ -30,6 +40,8 @@ export const Input = ({ label, placeholder, required, error, name }: Props) => {
         className={classNames("input input-bordered w-full", {
           "input-error": !!error,
         })}
+        value={value}
+        defaultValue={defaultValue}
       />
       {!!error && (
         <div className="label py-1">

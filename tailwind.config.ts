@@ -7,6 +7,23 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: "#3B82F6",
+          secondary: "#9333EA",
+          accent: "#10B981",
+          neutral: "oklch(93% 0 0)",
+          "base-100": "#ffffff",
+          info: "#3B82F6",
+          success: "#22C55E",
+          warning: "#F59E0B",
+          error: "#EF4444",
+        },
+      },
+    ],
+  },
   theme: {
     extend: {
       backgroundImage: {

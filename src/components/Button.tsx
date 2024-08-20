@@ -22,6 +22,7 @@ type Props = {
   variant?: keyof typeof styles;
   rounded?: boolean;
   loading?: boolean;
+  size?: "lg" | "sm" | "xs";
 };
 
 export function Button({
@@ -29,8 +30,15 @@ export function Button({
   rounded,
   loading = false,
   children,
+  size,
   ...props
 }: Props & React.ComponentProps<"button">) {
+  const sizeClassName = {
+    lg: "btn-lg",
+    sm: "btn-sm",
+    xs: "btn-xs",
+    default: "",
+  }[size ?? "default"];
   return (
     <button
       {...props}
@@ -41,7 +49,8 @@ export function Button({
         },
         "border-none",
         props?.className,
-        "btn"
+        "btn",
+        sizeClassName
       )}
     >
       {loading && <span className="loading loading-spinner"></span>}

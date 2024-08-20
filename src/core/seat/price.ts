@@ -1,7 +1,7 @@
 import { TSeat } from "./types";
 
 export const formatPrice = (value: number, multipler = 1000) => {
-  const formatter = new Intl.NumberFormat("en-US", {
+  const formatter = new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   });
