@@ -1,15 +1,52 @@
 import { groupBy } from "lodash-es";
 import { PaymentInfo } from "./PaymentInfo";
-import { TSeat } from "@/core/seat/types";
+import { labelLookup, TSeat } from "@/core/seat/types";
 import { TotalPrice } from "./TotalPrice";
+import { formatPrice, PRICES, sumPrice } from "@/core/seat/price";
 
 type Props = {
   selectedSeat: TSeat[];
   setPreviewType(type: TSeat["type"] | null): void;
+  popcorn?: number;
+  combo?: number;
+  drink?: number;
 };
 
-export const BookingInfo = ({ selectedSeat, setPreviewType }: Props) => {
+export const BookingInfo = ({
+  selectedSeat,
+  setPreviewType,
+  popcorn = 0,
+  combo = 0,
+  drink = 0,
+}: Props) => {
+  console.log({
+    popcorn,
+    combo,
+    drink,
+  });
   const seatGroupByType = groupBy(selectedSeat, (el) => el.type);
+
+  const foods = [
+    {
+      label: "Bỏng",
+      price: popcorn * PRICES.POPCORN,
+      count: popcorn,
+    },
+    {
+      label: "Nước",
+      price: drink * PRICES.DRINK,
+      count: drink,
+    },
+    {
+      label: "Combo bỏng & nước",
+      price: combo * PRICES.COMBO,
+      count: combo,
+    },
+  ];
+
+  const totalPrice = formatPrice(
+    sumPrice(selectedSeat) + foods.reduce((acc, el) => acc + el.price, 0)
+  );
 
   return (
     <div className="w-[360px]">
@@ -23,9 +60,12 @@ export const BookingInfo = ({ selectedSeat, setPreviewType }: Props) => {
             return (
               <PaymentInfo
                 key={type}
-                type={type as TSeat["type"]}
+                label={labelLookup[type as keyof typeof labelLookup] ?? ""}
+                description={seatGroupByType[type]
+                  .map((el) => el.name)
+                  .join(", ")}
                 count={seatGroupByType[type].length}
-                seats={seatGroupByType[type]}
+                price={formatPrice(sumPrice(seatGroupByType[type]))}
                 onMouseEnter={() => {
                   setPreviewType(type as TSeat["type"]);
                 }}
@@ -35,9 +75,21 @@ export const BookingInfo = ({ selectedSeat, setPreviewType }: Props) => {
               />
             );
           })}
-          {selectedSeat.length > 0 && <TotalPrice seats={selectedSeat} />}
         </>
       )}
+      <>
+        {foods
+          .filter((el) => el.count > 0)
+          .map((item) => (
+            <PaymentInfo
+              key={item.label}
+              label={item.label}
+              count={item.count}
+              price={formatPrice(item.price)}
+            />
+          ))}
+      </>
+      {selectedSeat.length > 0 && <TotalPrice value={totalPrice} />}
     </div>
   );
 };

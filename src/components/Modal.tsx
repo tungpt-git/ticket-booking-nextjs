@@ -26,7 +26,7 @@ export const Modal = ({
       })}
       role="dialog"
     >
-      <div className={classNames("modal-box", className)}>
+      <div className={classNames("modal-box py-0", className)}>
         {typeof title === "string" ? <Title>{title}</Title> : title}
         {children}
       </div>
@@ -40,7 +40,9 @@ export const Modal = ({
 };
 
 const Title = ({ children }: PropsWithChildren) => (
-  <h3 className="font-medium text-2xl mb-2">{children}</h3>
+  <h3 className="font-medium text-2xl mb-2 pt-6 sticky top-0 bg-inherit z-20">
+    {children}
+  </h3>
 );
 
 const Body = ({ children }: PropsWithChildren) => (
@@ -48,7 +50,9 @@ const Body = ({ children }: PropsWithChildren) => (
 );
 
 const Action = ({ children }: PropsWithChildren) => (
-  <div className="modal-action">{children}</div>
+  <div className="modal-action pb-6 sticky bottom-0 bg-inherit z-20">
+    {children}
+  </div>
 );
 
 Modal.Title = Title;

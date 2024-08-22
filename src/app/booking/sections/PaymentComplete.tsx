@@ -1,11 +1,4 @@
-import React, {
-  ComponentProps,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ComponentProps, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 //
 import { type TSeat } from "@/core/seat/types";
@@ -17,14 +10,8 @@ import { BookingInfo } from "../_components/BookingInfo";
 import { useServerAction } from "@/utils/hooks/useServerAction";
 import { handlePayment } from "@/services/payment/payment";
 import classNames from "classnames";
-import { formatPrice } from "@/core/seat/price";
+import { formatPrice, PRICES } from "@/core/seat/price";
 import { Counter } from "@/components/Counter";
-
-const PRICES = {
-  POPCORN: 65,
-  DRINK: 30,
-  COMBO: 90,
-};
 
 enum EStep {
   USER_INFO,
@@ -133,7 +120,7 @@ const Content = ({
                 setValue={setDrink}
               />
               <CounterInput
-                label="Combo Bỏng + Nước"
+                label="Combo bỏng & nước"
                 price={PRICES.COMBO}
                 value={combo}
                 setValue={setCombo}
@@ -146,6 +133,9 @@ const Content = ({
             <BookingInfo
               selectedSeat={selectedSeat}
               setPreviewType={setPreviewType}
+              popcorn={popcorn}
+              drink={drink}
+              combo={combo}
             />
             <div className="divider divider-horizontal" />
             <form ref={checkoutFormRef} action={onCheckoutFormSubmit}>
