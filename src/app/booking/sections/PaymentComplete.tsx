@@ -7,11 +7,10 @@ import { Button, FileUpload, Input } from "@/components";
 import { Modal } from "@/components/Modal";
 
 import { BookingInfo } from "../_components/BookingInfo";
-import { useServerAction } from "@/utils/hooks/useServerAction";
-import { handlePayment } from "@/services/payment/payment";
 import classNames from "classnames";
 import { formatPrice, PRICES } from "@/core/seat/price";
 import { Counter } from "@/components/Counter";
+import { ALLOWED_IMAGES_MIME_TYPE, MAX_FILE_SIZE } from "@/core";
 
 enum EStep {
   USER_INFO,
@@ -31,13 +30,63 @@ export type TUserForm = {
 };
 
 type Props = {
-  onPayment?(data: TUserForm): Promise<void>;
+  onPayment?({
+    user,
+    bill,
+    popcorn,
+    drink,
+    combo,
+  }: {
+    user: TUserForm;
+    bill: File;
+    popcorn: number;
+    drink: number;
+    combo: number;
+  }): Promise<void>;
   selectedSeat: TSeat[];
-  setPreviewType: React.Dispatch<React.SetStateAction<TSeat["type"] | null>>;
+  paymentLoading?: boolean;
+};
+
+export const PaymentComplete = (
+  props: Pick<React.ComponentProps<typeof Modal>, "open" | "onClose"> & Props
+) => {
+  return (
+    <Modal open={props.open} onClose={props.onClose} className="min-w-[800px]">
+      <Modal.Title>Thanh toán</Modal.Title>
+      {props.open && <Content {...props} />}
+    </Modal>
+  );
+};
+
+const Steps = ({ activeStep = EStep.USER_INFO }: { activeStep: EStep }) => {
+  const steps = [
+    {
+      id: EStep.USER_INFO,
+      label: "Thông tin cá nhân",
+    },
+    {
+      id: EStep.CHECKOUT,
+      label: "Chuyển khoản",
+    },
+  ];
+  return (
+    <ul className="steps w-full">
+      {steps.map((step, idx) => (
+        <li
+          key={step.id}
+          data-content={idx + 1}
+          className={classNames("step", {
+            "step-primary": activeStep >= step.id,
+          })}
+        >
+          {step.label}
+        </li>
+      ))}
+    </ul>
+  );
 };
 
 const UserInfoForm = ({ defaultValue }: { defaultValue?: TUserForm }) => {
-  useEffect(() => {});
   return (
     <div className="flex flex-col gap-2">
       <Input
@@ -68,8 +117,8 @@ const UserInfoForm = ({ defaultValue }: { defaultValue?: TUserForm }) => {
 const Content = ({
   onClose,
   selectedSeat,
-  setPreviewType,
   onPayment,
+  paymentLoading,
 }: Pick<React.ComponentProps<typeof Modal>, "open" | "onClose"> & Props) => {
   const userFormRef = useRef<HTMLFormElement | null>(null);
   const [userData, setUserData] = useState<TUserForm>();
@@ -79,14 +128,19 @@ const Content = ({
   const [drink, setDrink] = useState<number>(0);
   const [combo, setCombo] = useState<number>(0);
 
-  const [runAction, paymentLoading] = useServerAction(handlePayment);
-
   const onCheckoutFormSubmit = async (formData: FormData) => {
-    if (!userData) return;
-    const data = Object.fromEntries(formData) as TUserForm;
-    onPayment?.({ ...userData, ...data });
-    await runAction(selectedSeat, formData);
-    onClose?.();
+    const bill = formData.get("bill") as File;
+    if (!userData || !bill) {
+      return;
+    }
+
+    await onPayment?.({
+      user: userData,
+      bill,
+      popcorn,
+      drink,
+      combo,
+    });
   };
 
   const onUserFormSubmit = async (formData: FormData) => {
@@ -132,7 +186,6 @@ const Content = ({
           <div className="flex mt-8">
             <BookingInfo
               selectedSeat={selectedSeat}
-              setPreviewType={setPreviewType}
               popcorn={popcorn}
               drink={drink}
               combo={combo}
@@ -148,7 +201,30 @@ const Content = ({
                 unoptimized
                 loader={({ src }) => src}
               />
-              <FileUpload className="mt-2 mb-4 m-auto" required name="bill" />
+
+              <FileUpload
+                name="bill"
+                className="mt-2 mb-4 m-auto"
+                required
+                accept={ALLOWED_IMAGES_MIME_TYPE.join(",")}
+                onChange={(evt) => {
+                  const file = evt.target.files?.[0];
+
+                  const invalid =
+                    !file ||
+                    file.size > MAX_FILE_SIZE ||
+                    !ALLOWED_IMAGES_MIME_TYPE.includes(file.type);
+
+                  if (invalid) {
+                    evt.target.value = "";
+                    evt.target.innerHTML = "";
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    return false;
+                  }
+                  return true;
+                }}
+              />
             </form>
           </div>
         )}
@@ -185,45 +261,6 @@ const Content = ({
         </Button>
       </Modal.Action>
     </>
-  );
-};
-
-export const PaymentComplete = (
-  props: Pick<React.ComponentProps<typeof Modal>, "open" | "onClose"> & Props
-) => {
-  return (
-    <Modal open={props.open} onClose={props.onClose} className="min-w-[800px]">
-      <Modal.Title>Thanh toán</Modal.Title>
-      {props.open && <Content {...props} />}
-    </Modal>
-  );
-};
-
-const Steps = ({ activeStep = EStep.USER_INFO }: { activeStep: EStep }) => {
-  const steps = [
-    {
-      id: EStep.USER_INFO,
-      label: "Thông tin cá nhân",
-    },
-    {
-      id: EStep.CHECKOUT,
-      label: "Chuyển khoản",
-    },
-  ];
-  return (
-    <ul className="steps w-full">
-      {steps.map((step, idx) => (
-        <li
-          key={step.id}
-          data-content={idx + 1}
-          className={classNames("step", {
-            "step-primary": activeStep >= step.id,
-          })}
-        >
-          {step.label}
-        </li>
-      ))}
-    </ul>
   );
 };
 

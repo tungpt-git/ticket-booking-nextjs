@@ -52,6 +52,10 @@ export function Button({
         "btn",
         sizeClassName
       )}
+      onClick={(evt) => {
+        if (loading || props.disabled) return;
+        props.onClick?.(evt);
+      }}
     >
       {loading && <span className="loading loading-spinner"></span>}
       {children}

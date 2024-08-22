@@ -6,7 +6,7 @@ import { formatPrice, PRICES, sumPrice } from "@/core/seat/price";
 
 type Props = {
   selectedSeat: TSeat[];
-  setPreviewType(type: TSeat["type"] | null): void;
+  setPreviewType?(type: TSeat["type"] | null): void;
   popcorn?: number;
   combo?: number;
   drink?: number;
@@ -19,11 +19,6 @@ export const BookingInfo = ({
   combo = 0,
   drink = 0,
 }: Props) => {
-  console.log({
-    popcorn,
-    combo,
-    drink,
-  });
   const seatGroupByType = groupBy(selectedSeat, (el) => el.type);
 
   const foods = [
@@ -67,10 +62,10 @@ export const BookingInfo = ({
                 count={seatGroupByType[type].length}
                 price={formatPrice(sumPrice(seatGroupByType[type]))}
                 onMouseEnter={() => {
-                  setPreviewType(type as TSeat["type"]);
+                  setPreviewType?.(type as TSeat["type"]);
                 }}
                 onMouseLeave={() => {
-                  setPreviewType(null);
+                  setPreviewType?.(null);
                 }}
               />
             );

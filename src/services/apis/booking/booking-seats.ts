@@ -11,6 +11,9 @@ type Params = {
   notes?: string;
   bill?: string;
   total?: number;
+  popcorn: number;
+  drink: number;
+  combo: number;
 };
 
 export const bookingSeats = async ({
@@ -22,6 +25,9 @@ export const bookingSeats = async ({
   notes,
   bill,
   total,
+  popcorn = 0,
+  drink = 0,
+  combo = 0,
 }: Params) => {
   const createdDate = dayjs(new Date()).format("DD-MM-YYYY HH:mm:ss");
   return googleServices.append({
@@ -36,6 +42,9 @@ export const bookingSeats = async ({
           email,
           seatLabels,
           count,
+          popcorn,
+          drink,
+          combo,
           total,
           bill,
           notes,

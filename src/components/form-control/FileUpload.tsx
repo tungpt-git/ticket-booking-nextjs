@@ -1,17 +1,16 @@
 import classNames from "classnames";
+import { ComponentProps } from "react";
 
 type Props = {
   className?: string;
   required?: boolean;
-  name: string;
-};
-export const FileUpload = ({ className, required, name }: Props) => {
+} & ComponentProps<"input">;
+export const FileUpload = ({ className, ...props }: Props) => {
   return (
     <input
+      {...props}
       type="file"
-      name={name}
       className={classNames("file-input w-full file-input-bordered", className)}
-      required={required}
     />
   );
 };

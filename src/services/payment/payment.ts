@@ -1,7 +1,7 @@
 "use server";
 import { upload } from "../googleapis/upload";
-import { GET_ALL_BOOKINGS, seatSevices } from "../seats";
-import { revalidateTag } from "next/cache";
+import { seatSevices } from "../seats";
+import { revalidatePath } from "next/cache";
 
 type Data = {
   seats: string;
@@ -9,11 +9,13 @@ type Data = {
   phone: string;
   email: string;
   bill: File;
+  popcorn: string;
+  drink: string;
+  combo: string;
 };
 export const handlePayment = async (formData: FormData) => {
-  const { seats, name, email, phone, bill } = Object.fromEntries(
-    formData
-  ) as unknown as Data;
+  const { seats, name, email, phone, bill, popcorn, drink, combo } =
+    Object.fromEntries(formData) as unknown as Data;
 
   let fileId: string = "";
   try {
@@ -30,9 +32,14 @@ export const handlePayment = async (formData: FormData) => {
       },
       fileId
         ? `=IMAGE("https://drive.google.com/thumbnail?id=${fileId}&sz=w1000")`
-        : ""
+        : "",
+      {
+        popcorn: +popcorn,
+        drink: +drink,
+        combo: +combo,
+      }
     );
-    revalidateTag(GET_ALL_BOOKINGS);
+    revalidatePath("/booking");
   } catch {
     // do nothing
   }

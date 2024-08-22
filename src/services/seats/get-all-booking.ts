@@ -16,7 +16,7 @@ export const getAllBooking: TSeatService["getAllBooking"] = async () => {
       string
     ];
 
-    const seats = idStr.split("\n").map((id) => ({
+    const seats = (idStr ?? "").split("\n").map((id) => ({
       ...allSeats[id],
       user: {
         email,

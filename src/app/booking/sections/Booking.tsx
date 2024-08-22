@@ -1,15 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { ComponentProps, useEffect, useState } from "react";
 //
 import { type TSeat } from "@/core/seat/types";
 import { TUser } from "@/core/user/type";
 //
 import { Room } from "./Room";
 import { Payment } from "./Payment";
-import { PaymentComplete, type TUserForm } from "./PaymentComplete";
-//
-import { useServerAction } from "@/utils/hooks/useServerAction";
-import { handlePayment } from "@/services/payment/payment";
+import { PaymentComplete } from "./PaymentComplete";
+import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
 
 type Props = {
   bookedSeats?: Array<TSeat & { user?: TUser }>;
@@ -19,35 +17,29 @@ export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
   const [bookedSeats, setBookedSeats] = useState(_bookedSeats);
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<TSeat[]>([]);
-  const [disabledSelect, setDisabledSelect] = useState(false);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
 
-  const [runAction, paymentLoading] = useServerAction(handlePayment);
+  const { checkout, loading: paymentLoading } = useBookingCheckout();
 
-  const onPayment = async (data: TUserForm) => {
+  const onPayment: ComponentProps<typeof PaymentComplete>["onPayment"] = async (
+    data
+  ) => {
     if (!selectedSeat.length) return;
-    const formData = new FormData();
-    formData.append("seats", JSON.stringify(selectedSeat));
-    formData.append("bill", data.bill);
-    formData.append("name", data.name);
-    formData.append("email", data.email);
-    formData.append("phone", data.phone);
 
-    await runAction?.(formData);
+    await checkout?.({ ...data, seats: selectedSeat });
+    setOpenPaymentModal(false);
     setBookedSeats((prev) => [
       ...prev,
       ...selectedSeat.map((seat) => ({
         ...seat,
-        user: data,
+        user: data.user,
       })),
     ]);
     setSelectedSeat([]);
-    setDisabledSelect(false);
   };
 
   useEffect(
     function sync() {
-      console.log({ bookedSeats });
       setBookedSeats(bookedSeats);
     },
     [bookedSeats]
@@ -59,20 +51,16 @@ export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
         <div className="flex gap-12">
           <Room
             seats={seats}
-            bookedSeats={[
-              ...bookedSeats,
-              ...(disabledSelect ? Object.values(seats) : []),
-            ].filter(
+            bookedSeats={bookedSeats.filter(
               (seat) =>
                 !selectedSeat.some((selected) => selected.id === seat.id)
             )}
             selectedSeat={selectedSeat}
-            setSelectedSeat={disabledSelect ? () => {} : setSelectedSeat}
+            setSelectedSeat={setSelectedSeat}
             previewType={previewType}
           />
 
           <Payment
-            loading={paymentLoading}
             selectedSeat={selectedSeat}
             setPreviewType={setPreviewType}
             onPayment={() => {
@@ -85,8 +73,8 @@ export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
             open={openPaymentModal}
             onClose={() => setOpenPaymentModal(false)}
             onPayment={onPayment}
+            paymentLoading={paymentLoading}
             selectedSeat={selectedSeat}
-            setPreviewType={setPreviewType}
           />
         </div>
       </section>

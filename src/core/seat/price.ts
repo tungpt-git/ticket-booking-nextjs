@@ -16,3 +16,19 @@ export const PRICES = {
   DRINK: 30,
   COMBO: 90,
 };
+
+export const calcBillTotal = ({
+  seats,
+  popcorn = 0,
+  drink = 0,
+  combo = 0,
+}: {
+  seats: TSeat[];
+  popcorn: number;
+  drink: number;
+  combo: number;
+}) =>
+  sumPrice(seats) +
+  PRICES.POPCORN * popcorn +
+  PRICES.DRINK * drink +
+  PRICES.COMBO * combo;
