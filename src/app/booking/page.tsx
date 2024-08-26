@@ -1,6 +1,6 @@
 import React, { type ReactElement } from "react";
 
-import { seatSevices } from "@/services/seats";
+import { seatService } from "@/services/seats";
 import { getAll } from "@/services/apis/seat/get-all";
 
 import { auth, signOut } from "@/core/auth";
@@ -25,7 +25,7 @@ const IconLogout = () => (
 );
 
 export default async function BookingPage(): Promise<ReactElement> {
-  const bookedSeats = await seatSevices.getAllBooking();
+  const bookedSeats = await seatService.getAllBooking();
   const seats = await getAll();
   const session = await auth();
 

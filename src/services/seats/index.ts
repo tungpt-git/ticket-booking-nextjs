@@ -5,11 +5,11 @@ import { getAllBooking } from "./get-all-booking";
 
 export const GET_ALL_BOOKINGS = "GET_ALL_BOOKINGS";
 
-export const seatSevices = {
+export const seatService = {
   booking,
   getAllBooking: unstable_cache(getAllBooking, [GET_ALL_BOOKINGS]),
 };
 
 export function useSeatService(): TSeatService {
-  return seatSevices;
+  return seatService;
 }

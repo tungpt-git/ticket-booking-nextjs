@@ -7,7 +7,9 @@ import { TUser } from "@/core/user/type";
 import { Room } from "./Room";
 import { Payment } from "./Payment";
 import { PaymentComplete } from "./PaymentComplete";
+//
 import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
+import { useReservation } from "@/adapters/client/useReservation";
 
 type Props = {
   bookedSeats?: Array<TSeat & { user?: TUser }>;
@@ -20,6 +22,7 @@ export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
 
   const { checkout, loading: paymentLoading } = useBookingCheckout();
+  const { reservation, loading: reservationLoading } = useReservation();
 
   const onPayment: ComponentProps<typeof PaymentComplete>["onPayment"] = async (
     data
@@ -61,23 +64,24 @@ export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
           />
 
           <Payment
+            loading={reservationLoading}
             selectedSeat={selectedSeat}
             setPreviewType={setPreviewType}
             onPayment={() => {
               if (!selectedSeat.length) return;
-              setOpenPaymentModal(true);
+              // setOpenPaymentModal(true);
+              reservation(selectedSeat.map((seat) => seat.id));
             }}
-          />
-
-          <PaymentComplete
-            open={openPaymentModal}
-            onClose={() => setOpenPaymentModal(false)}
-            onPayment={onPayment}
-            paymentLoading={paymentLoading}
-            selectedSeat={selectedSeat}
           />
         </div>
       </section>
+      <PaymentComplete
+        open={openPaymentModal}
+        onClose={() => setOpenPaymentModal(false)}
+        onPayment={onPayment}
+        paymentLoading={paymentLoading || reservationLoading}
+        selectedSeat={selectedSeat}
+      />
     </main>
   );
 }

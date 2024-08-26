@@ -1,6 +1,6 @@
 "use server";
 import { upload } from "../googleapis/upload";
-import { seatSevices } from "../seats";
+import { seatService } from "../seats";
 import { revalidatePath } from "next/cache";
 
 type Data = {
@@ -23,7 +23,7 @@ export const handlePayment = async (formData: FormData) => {
       fileId = (await upload(bill)) ?? "";
     }
 
-    await seatSevices.booking(
+    await seatService.booking(
       JSON.parse(seats),
       {
         name,
@@ -40,7 +40,8 @@ export const handlePayment = async (formData: FormData) => {
       }
     );
     revalidatePath("/booking");
-  } catch {
+  } catch (error) {
     // do nothing
+    console.log(error);
   }
 };

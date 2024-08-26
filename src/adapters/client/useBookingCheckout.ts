@@ -7,7 +7,7 @@ import { useServerAction } from "@/utils/hooks/useServerAction";
 
 type Params = {
   user: TUser;
-  bill: File;
+  bill?: File;
   popcorn: number;
   drink: number;
   combo: number;
@@ -29,7 +29,7 @@ export const useBookingCheckout = () => {
 
     const formData = new FormData();
     formData.append("seats", JSON.stringify(seats));
-    formData.append("bill", bill);
+    bill && formData.append("bill", bill);
     formData.append("name", user.name);
     formData.append("email", user.email);
     formData.append("phone", user.phone);
