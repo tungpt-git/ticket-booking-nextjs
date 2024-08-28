@@ -9,9 +9,9 @@ export const checkExist = async (seatIds: TSeat["id"][]) => {
   const seatIdsLookup = toLookup(seatIds, (el) => el);
 
   const allReservations = await getAll();
-  const isReservationExist = allReservations.some(
+  const isReservationExist = allReservations.find(
     (reservation) =>
-      !!seatIdsLookup[reservation.seatId] &&
+      reservation.seatIds.some((id) => !!seatIdsLookup[id]) &&
       reservation.expiryTime > now.valueOf()
   );
 
