@@ -1,1 +1,1 @@
-export const JOIN_CHARACER = "\n";
+export const JOIN_CHARACTER = "-";

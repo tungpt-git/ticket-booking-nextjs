@@ -11,9 +11,9 @@ import { PaymentComplete } from "./PaymentComplete";
 import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
 import { useReservation } from "@/adapters/client/useReservation";
 
-type Props = {
+type Props = Pick<React.ComponentProps<typeof Room>, "seats"> & {
   bookedSeats?: Array<TSeat & { user?: TUser }>;
-} & Pick<React.ComponentProps<typeof Room>, "seats">;
+};
 
 export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
   const [bookedSeats, setBookedSeats] = useState(_bookedSeats);

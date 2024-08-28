@@ -2,12 +2,14 @@ import React, { type ReactElement } from "react";
 
 import { seatService } from "@/services/seats";
 import { getAll } from "@/services/apis/seat/get-all";
+import { getAll as getAllReservation } from "@/services/apis/reservation/get-all";
 
 import { auth, signOut } from "@/core/auth";
 
 import { Button, GoogleSignInButton } from "@/components";
 
 import { Booking } from "./sections/Booking";
+import { TSeat } from "@/core/seat/types";
 
 const IconLogout = () => (
   <svg
@@ -28,6 +30,13 @@ export default async function BookingPage(): Promise<ReactElement> {
   const bookedSeats = await seatService.getAllBooking();
   const seats = await getAll();
   const session = await auth();
+  const reservation = await getAllReservation();
+
+  const reservationSeats = reservation.reduce((acc, cur) => {
+    return [...acc, ...cur.seatIds.map((id) => seats[id])];
+  }, [] as TSeat[]);
+
+  console.log("reservation", reservation);
 
   return (
     <div>
@@ -55,7 +64,10 @@ export default async function BookingPage(): Promise<ReactElement> {
           </form>
         )}
       </div>
-      <Booking bookedSeats={bookedSeats} seats={seats} />
+      <Booking
+        bookedSeats={[...bookedSeats, ...reservationSeats]}
+        seats={seats}
+      />
     </div>
   );
 }
