@@ -16,6 +16,7 @@ type Props = Pick<React.ComponentProps<typeof Room>, "seats"> & {
 };
 
 export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
+  //
   const [bookedSeats, setBookedSeats] = useState(_bookedSeats);
   const [previewType, setPreviewType] = useState<TSeat["type"] | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<TSeat[]>([]);
