@@ -18,11 +18,13 @@ export const MultipleSeat = ({
 }>) => {
   return (
     <div
-      style={{
-        width: (22 + 10 * (count - 2)) * 4,
-      }}
+      // style={{
+      //   width: `calc(${count} * 0.25rem + 4px)`,
+      // }}
       className={classNames(
-        "border-2 border-solid h-10 rounded transition-all",
+        "border-2 border-solid h-5 lg:h-10 rounded transition-all",
+        `w-[44px]`,
+        `lg:w-[88px]`,
         {
           "hover:bg-seat-multiple border-seat-multiple": !disabled,
           "hover:bg-opacity-30 text-seat-multiple":

@@ -21,37 +21,32 @@ export const Counter = ({
   };
   return (
     <div className="flex items-center gap-1">
-      <Button size="xs" onClick={decrease}>
+      <Button size="xs" variant="primary" onClick={decrease}>
         <svg
-          xmlns="http://www.w3.org/2000/svg"
+          viewBox="64 64 896 896"
+          focusable="false"
+          data-icon="minus"
           width="1em"
           height="1em"
-          viewBox="0 0 24 24"
-          fill="none"
+          fill="currentColor"
+          aria-hidden="true"
         >
-          <path
-            d="M6 12L18 12"
-            stroke="#000000"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <path d="M872 474H152c-4.4 0-8 3.6-8 8v60c0 4.4 3.6 8 8 8h720c4.4 0 8-3.6 8-8v-60c0-4.4-3.6-8-8-8z"></path>
         </svg>
       </Button>
       {value}
-      <Button size="xs" onClick={increase}>
+      <Button size="xs" variant="primary" onClick={increase}>
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          x="0px"
-          y="0px"
+          viewBox="64 64 896 896"
+          focusable="false"
+          data-icon="plus"
           width="1em"
           height="1em"
-          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
         >
-          <path
-            fillRule="evenodd"
-            d="M 11 2 L 11 11 L 2 11 L 2 13 L 11 13 L 11 22 L 13 22 L 13 13 L 22 13 L 22 11 L 13 11 L 13 2 Z"
-          ></path>
+          <path d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z"></path>
+          <path d="M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8z"></path>
         </svg>
       </Button>
     </div>

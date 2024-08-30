@@ -4,7 +4,7 @@ import Image from "next/image";
 //
 import { type TSeat } from "@/core/seat/types";
 //
-import { Button, CounterInput, FileUpload, Input } from "@/components";
+import { Button, Card, CounterInput, FileUpload, Input } from "@/components";
 
 import { BookingInfo } from "../_components/BookingInfo";
 import classNames from "classnames";
@@ -81,35 +81,32 @@ export const PaymentComplete = ({
 
   return (
     <div>
-      <Steps activeStep={step} />
-      <div>
-        <div className="mt-4 border-2 border-dashed rounded p-4">
-          <h4 className="font-medium text-xl">Thông tin cá nhân</h4>
-          <form ref={userFormRef} action={onUserFormSubmit}>
-            <UserInfoForm defaultValue={userData} />
-          </form>
-        </div>
-        <div className="mt-4 flex flex-col gap-2 border-2 border-dashed rounded p-4">
-          <CounterInput
-            label="Bỏng?🍿"
-            price={PRICES.POPCORN}
-            value={popcorn}
-            setValue={setPopcorn}
-          />
-          <CounterInput
-            label="Nước?🥤"
-            price={PRICES.DRINK}
-            value={drink}
-            setValue={setDrink}
-          />
-          <CounterInput
-            label="Combo bỏng & nước"
-            price={PRICES.COMBO}
-            value={combo}
-            setValue={setCombo}
-          />
-        </div>
-      </div>
+      <Card>
+        <h4 className="font-medium text-xl">Thông tin cá nhân</h4>
+        <form ref={userFormRef} action={onUserFormSubmit}>
+          <UserInfoForm defaultValue={userData} />
+        </form>
+      </Card>
+      <Card>
+        <CounterInput
+          label="Bỏng?🍿"
+          price={PRICES.POPCORN}
+          value={popcorn}
+          setValue={setPopcorn}
+        />
+        <CounterInput
+          label="Nước?🥤"
+          price={PRICES.DRINK}
+          value={drink}
+          setValue={setDrink}
+        />
+        <CounterInput
+          label="Combo bỏng & nước"
+          price={PRICES.COMBO}
+          value={combo}
+          setValue={setCombo}
+        />
+      </Card>
       <div className="flex mt-8">
         <BookingInfo
           selectedSeat={selectedSeat}

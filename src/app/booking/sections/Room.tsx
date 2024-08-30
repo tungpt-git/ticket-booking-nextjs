@@ -61,10 +61,10 @@ export function Room({
         {" ĐÂY LÀ MÀN HÌNH "}
         <span className="inline-block">🍿🍿</span>
       </div>
-      <div className="flex flex-col items-center gap-2 self-center p-6">
+      <div className="flex flex-col items-center gap-1 lg:gap-2 lg:p-6">
         {Object.keys(rows).map((row) => (
           <Fragment key={row}>
-            <div className="flex items-center gap-2 justify-between">
+            <div className="flex items-center gap-1 lg:gap-2 justify-between">
               {Array.from({ length: slotCount }).map((_, idx) => {
                 const seat = orderBy(rows[row], (x) =>
                   Array.isArray(x.idx) ? x.idx[0] : x.idx
@@ -91,31 +91,33 @@ export function Room({
           </Fragment>
         ))}
       </div>
-      <div className="flex gap-6">
-        <div>
-          <div className="flex gap-1">
-            <SeatLengend type="normal">
-              <span className="text-[10px]">A</span>
-            </SeatLengend>
-            <SeatLengend type="normal" showLabel label="Ghế 120k">
-              <span className="text-[10px]">B</span>
-            </SeatLengend>
-          </div>
-          <SeatLengend type="normal" showLabel label="Ghế 145k" />
-          <SeatLengend type="vip" showLabel label="Ghế VIP" />
-          <SeatLengend type="multiple" showLabel label="Ghế đôi" />
-        </div>
-        <div>
-          <SeatLengend type="normal" selected showLabel label="Ghế được chọn" />
-          <SeatLengend type="normal" disabled showLabel label="Ghế đã bán" />
-          {!!currentUser && (
-            <SeatLengend type="normal" owned showLabel label="Ghế đã sở hữu" />
-          )}
-        </div>
-      </div>
+      <Legends />
     </div>
   );
 }
+
+const Legends = () => {
+  return (
+    <div className="flex gap-6 mt-2">
+      <div>
+        <div className="flex gap-1">
+          <SeatLengend type="normal">
+            <span className="text-[10px]">A</span>
+          </SeatLengend>
+          <SeatLengend type="normal" showLabel label="Ghế 120k">
+            <span className="text-[10px]">B</span>
+          </SeatLengend>
+        </div>
+        <SeatLengend type="normal" showLabel label="Ghế thường" />
+        <SeatLengend type="multiple" showLabel label="Ghế đôi" />
+      </div>
+      <div>
+        <SeatLengend type="normal" selected showLabel label="Ghế được chọn" />
+        <SeatLengend type="normal" disabled showLabel label="Ghế đã bán" />
+      </div>
+    </div>
+  );
+};
 
 const Seat = ({
   seat,

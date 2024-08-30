@@ -4,9 +4,9 @@ import { seatService } from "@/services/seats";
 import { getAll } from "@/services/apis/seat/get-all";
 import { getAll as getAllReservation } from "@/services/apis/reservation/get-all";
 
-import { auth, signOut } from "@/core/auth";
+// import { auth, signOut } from "@/core/auth";
 
-import { Button, GoogleSignInButton } from "@/components";
+// import { Button, GoogleSignInButton } from "@/components";
 
 import { Booking } from "./sections/Booking";
 import { TSeat } from "@/core/seat/types";
@@ -29,7 +29,7 @@ const IconLogout = () => (
 export default async function BookingPage(): Promise<ReactElement> {
   const bookedSeats = await seatService.getAllBooking();
   const seats = await getAll();
-  const session = await auth();
+  // const session = await auth();
   const reservation = await getAllReservation();
 
   const reservationSeats = reservation.reduce((acc, cur) => {
@@ -39,8 +39,8 @@ export default async function BookingPage(): Promise<ReactElement> {
   console.log("reservation", reservation);
 
   return (
-    <div>
-      <div className="navbar flex gap-2 w-full justify-end px-24">
+    <main>
+      {/* <div className="navbar flex gap-2 w-full justify-end px-24">
         {!session?.user ? (
           <GoogleSignInButton />
         ) : (
@@ -63,11 +63,11 @@ export default async function BookingPage(): Promise<ReactElement> {
             </Button>
           </form>
         )}
-      </div>
+      </div> */}
       <Booking
         bookedSeats={[...bookedSeats, ...reservationSeats]}
         seats={seats}
       />
-    </div>
+    </main>
   );
 }
