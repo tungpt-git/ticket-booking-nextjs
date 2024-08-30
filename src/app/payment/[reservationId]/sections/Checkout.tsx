@@ -75,12 +75,11 @@ export const Checkout = ({ selectedSeat }: Props) => {
       <section className="flex flex-col gap-5 py-5">
         <Card>
           <h4 className="font-medium text-xl">Thông tin cá nhân</h4>
-
           <UserInfoForm />
         </Card>
         <Card>
           <h4 className="font-medium text-xl">Thanh toán</h4>
-          <div className="flex">
+          <div className="lg:flex">
             <div>
               <BookingInfo selectedSeat={selectedSeat} />
               <CounterInput

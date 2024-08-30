@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 //
 import { type TSeat } from "@/core/seat/types";
 //
-import { BookingInfo, Button } from "@/components";
+import { BookingInfo, Button, Card } from "@/components";
 
 type Props = {
   onPayment?(): void;
@@ -18,7 +18,7 @@ export function Payment({
   loading,
 }: Props) {
   return (
-    <div className="flex flex-col bg-gray-50 rounded-xl p-6 shadow-inheritshrink-0 shadow-2xl gap-5">
+    <Card>
       <h3 className="text-xl font-medium uppercase">Thông tin vé</h3>
       <BookingInfo
         selectedSeat={selectedSeat}
@@ -34,6 +34,6 @@ export function Payment({
       >
         Thanh toán
       </Button>
-    </div>
+    </Card>
   );
 }

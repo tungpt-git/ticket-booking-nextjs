@@ -42,9 +42,9 @@ export const BookingInfo = ({
   ];
 
   return (
-    <div className="w-[360px] flex flex-col">
+    <div className="min-w-[360px] flex flex-col">
       {!selectedSeat.length ? (
-        <div className="rounded border-2 border-dashed border-gray-300 h-[400px] w-full flex items-center justify-center text-gray-300 font-medium">
+        <div className="rounded border-2 border-dashed border-gray-300 min-h-[400px] w-full flex items-center justify-center text-gray-300 font-medium">
           Ghế bạn chọn sẽ hiển thị ở đây
         </div>
       ) : (
