@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 import { checkExist } from "./check-exist";
 
 export const reservation = async (formData: FormData) => {
+  const id = formData.get("id");
   const seatIds = ((formData.get("seatIds") as string) ?? "").split(
     JOIN_CHARACTER
   );
@@ -32,7 +33,7 @@ export const reservation = async (formData: FormData) => {
     range: `${SheetsName.reservation}!A:C`,
     valueInputOption: "USER_ENTERED",
     requestBody: {
-      values: [[uuidv4(), seatIds.join(JOIN_CHARACTER), expiryTime]],
+      values: [[id ?? uuidv4(), seatIds.join(JOIN_CHARACTER), expiryTime]],
     },
   });
 };

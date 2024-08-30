@@ -1,8 +1,8 @@
 import { groupBy } from "lodash-es";
-import { PaymentInfo } from "./PaymentInfo";
 import { labelLookup, TSeat } from "@/core/seat/types";
-import { TotalPrice } from "./TotalPrice";
 import { formatPrice, PRICES, sumPrice } from "@/core/seat/price";
+import { TotalPrice } from "./TotalPrice";
+import { PaymentInfo } from "./PaymentInfo";
 
 type Props = {
   selectedSeat: TSeat[];
@@ -10,6 +10,7 @@ type Props = {
   popcorn?: number;
   combo?: number;
   drink?: number;
+  showTotal?: boolean;
 };
 
 export const BookingInfo = ({
@@ -18,6 +19,7 @@ export const BookingInfo = ({
   popcorn = 0,
   combo = 0,
   drink = 0,
+  showTotal = false,
 }: Props) => {
   const seatGroupByType = groupBy(selectedSeat, (el) => el.type);
 
@@ -39,12 +41,8 @@ export const BookingInfo = ({
     },
   ];
 
-  const totalPrice = formatPrice(
-    sumPrice(selectedSeat) + foods.reduce((acc, el) => acc + el.price, 0)
-  );
-
   return (
-    <div className="w-[360px] flex flex-col my-4">
+    <div className="w-[360px] flex flex-col">
       {!selectedSeat.length ? (
         <div className="rounded border-2 border-dashed border-gray-300 h-[400px] w-full flex items-center justify-center text-gray-300 font-medium">
           Ghế bạn chọn sẽ hiển thị ở đây
@@ -84,7 +82,14 @@ export const BookingInfo = ({
             />
           ))}
       </>
-      {selectedSeat.length > 0 && <TotalPrice value={totalPrice} />}
+      {showTotal && selectedSeat.length > 0 && (
+        <TotalPrice
+          seats={selectedSeat}
+          popcorn={popcorn}
+          drink={drink}
+          combo={combo}
+        />
+      )}
     </div>
   );
 };

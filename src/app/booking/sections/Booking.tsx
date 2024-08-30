@@ -31,9 +31,9 @@ export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
   return (
     <section
       id="_seats"
-      className="flex flex-col items-center gap-12 pt-6 lg:p-6 lg:p-24"
+      className="flex flex-col items-center gap-12 p-6 lg:pt-48"
     >
-      <div className="lg:flex lg:gap-12">
+      <div className="lg:flex lg:gap-12 lg:items-start">
         <Room
           seats={seats}
           bookedSeats={bookedSeats.filter(

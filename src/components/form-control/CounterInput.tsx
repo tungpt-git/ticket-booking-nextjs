@@ -1,25 +1,31 @@
 import { ComponentProps } from "react";
 import { Counter } from "@/components/Counter";
 import { formatPrice } from "@/core/seat/price";
+import classNames from "classnames";
+
+type Props = ComponentProps<typeof Counter> & {
+  price: number;
+  label: string;
+  className?: string;
+};
 
 export const CounterInput = ({
   label,
   value,
   setValue,
   price,
-}: ComponentProps<typeof Counter> & { price: number; label: string }) => {
+  className,
+}: Props) => {
   return (
-    <div className="flex justify-between">
-      <div className="flex gap-2 items-start">
-        <div>
-          <div>{label}</div>
-          <div className="text-sm">{formatPrice(price)}</div>
-        </div>
+    <div
+      className={classNames("flex justify-between p-2 items-center", className)}
+    >
+      <div>
+        <div>{label}</div>
+        <div className="text-sm mb-1">{formatPrice(price)}</div>
         <Counter value={value} setValue={setValue} min={0} max={100} />
       </div>
-      {value > 0 && (
-        <span className="font-medium">{`${formatPrice(value * price)}`}</span>
-      )}
+      <span>{`${formatPrice(value * price)}`}</span>
     </div>
   );
 };

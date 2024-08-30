@@ -6,6 +6,7 @@ import { reservation as reservation_action } from "@/services/apis/reservation/r
 import { useServerAction } from "@/utils/hooks/useServerAction";
 import { useToaster } from "@/utils/hooks/useToaster";
 import { useRouter } from "next/navigation";
+import { v4 } from "uuid";
 
 export const useReservation = () => {
   const [runAction, loading] = useServerAction(reservation_action);
@@ -16,9 +17,10 @@ export const useReservation = () => {
     try {
       const formData = new FormData();
       formData.append("seatIds", seatIds.join(JOIN_CHARACTER));
-      const res = await runAction?.(formData);
-      console.log("res reservation", res);
-      router.push("/payment");
+      const id = v4();
+      formData.append("id", id);
+      await runAction?.(formData);
+      router.push(`/payment/${id}`);
     } catch (error) {
       const { message } = error as Error;
       alert(message, {

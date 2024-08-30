@@ -1,16 +1,15 @@
 import React, { ComponentProps, useRef, useState } from "react";
 import Image from "next/image";
 //
+import { ALLOWED_IMAGES_MIME_TYPE, MAX_FILE_SIZE } from "@/core";
+import { formatPrice, PRICES } from "@/core/seat/price";
 import { type TSeat } from "@/core/seat/types";
 //
-import { Button, FileUpload, Input } from "@/components";
+import { BookingInfo, Button, FileUpload, Input } from "@/components";
 import { Modal } from "@/components/Modal";
-
-import { BookingInfo } from "../_components/BookingInfo";
-import classNames from "classnames";
-import { formatPrice, PRICES } from "@/core/seat/price";
 import { Counter } from "@/components/Counter";
-import { ALLOWED_IMAGES_MIME_TYPE, MAX_FILE_SIZE } from "@/core";
+
+import classNames from "classnames";
 
 enum EStep {
   USER_INFO,

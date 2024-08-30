@@ -21,7 +21,7 @@ export const Counter = ({
   };
   return (
     <div className="flex items-center gap-1">
-      <Button size="xs" variant="primary" onClick={decrease}>
+      <Button size="xs" variant="pink" onClick={decrease} type="button">
         <svg
           viewBox="64 64 896 896"
           focusable="false"
@@ -35,7 +35,7 @@ export const Counter = ({
         </svg>
       </Button>
       {value}
-      <Button size="xs" variant="primary" onClick={increase}>
+      <Button size="xs" variant="pink" onClick={increase} type="button">
         <svg
           viewBox="64 64 896 896"
           focusable="false"
