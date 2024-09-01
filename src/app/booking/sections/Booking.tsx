@@ -29,7 +29,7 @@ export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
   );
 
   return (
-    <section id="_seats" className="p-0 lg:p-6 lg:pt-48 lg:flex">
+    <section id="_seats" className="p-0 lg:p-6 lg:pt-24 lg:flex">
       <div className="lg:flex lg:gap-12 mx-auto">
         <Room
           seats={seats}
