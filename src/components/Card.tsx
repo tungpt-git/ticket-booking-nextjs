@@ -12,7 +12,7 @@ export const Card = ({ imageSrc, children, className }: Props) => {
   return (
     <div
       className={classNames(
-        "card lg:card-side bg-base-100 shadow-xl rounded-lg",
+        "card lg:card-side bg-base-100 shadow-lg rounded-lg",
         className
       )}
     >

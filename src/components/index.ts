@@ -1,5 +1,4 @@
 export * from "./Button";
-export * from "./GoogleSignInButton";
 export * from "./form-control/Input";
 export * from "./form-control/FileUpload";
 export * from "./Card";

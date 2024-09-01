@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <nav className="navbar flex gap-2 w-full justify-end lg:px-12 shadow-lg">
+        <nav className="navbar flex gap-2 w-full justify-end lg:px-12 shadow-sm">
           <a
             href="https://www.facebook.com/profile.php?id=61562681930401"
             className="text-2xl"
