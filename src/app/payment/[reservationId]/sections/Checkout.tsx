@@ -48,7 +48,7 @@ export const Checkout = ({ selectedSeat }: Props) => {
       reservationId: params.reservationId,
     });
 
-    router.replace("/");
+    router.replace("/booking");
   };
 
   const foods = [

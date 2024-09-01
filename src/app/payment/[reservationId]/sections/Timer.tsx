@@ -14,7 +14,7 @@ export const Timer = ({ expiryTime }: Props) => {
   useInterval(() => {
     const now = new Date().valueOf();
     if (expiryTime <= new Date().valueOf()) {
-      router.push("/");
+      router.push("/booking");
     }
     setNow(now);
   }, 1000);
