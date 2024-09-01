@@ -17,7 +17,7 @@ export const getAll = async () => {
       {
         id,
         seatIds: seatIds.split(JOIN_CHARACTER),
-        expiryTime: Number(expiryTime),
+        expiryTime: new Date(expiryTime).valueOf(),
       },
     ];
   }, [] as TReservation[]);

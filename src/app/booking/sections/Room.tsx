@@ -54,7 +54,7 @@ export function Room({
 
   return (
     <div>
-      <div className="text-center text-2xl mt-6 animate-bounce">
+      <div className="text-center text-2xl pt-6">
         <span className="inline-block">🍿🍿</span>
         {" ĐÂY LÀ MÀN HÌNH "}
         <span className="inline-block">🍿🍿</span>

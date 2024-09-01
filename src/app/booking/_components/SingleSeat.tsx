@@ -25,11 +25,11 @@ export const SingleSeat = ({
         "border-2 border-solid border-seat-normal rounded transition-all",
         "min-w-10 min-h-10",
         {
-          "hover:bg-opacity-30": !(owned || selected) && !disabled,
+          "hover:opacity-50": !(owned || selected) && !disabled,
           //
           "bg-seat-normal-selected !border-seat-normal-selected":
             (owned || selected) && variant === "normal" && !disabled,
-          "hover:bg-seat-normal-selected hover:border-seat-normal-selected text-seat-normal hover:text-seat-normal-selected":
+          "bg-seat-normal text-white hover:bg-seat-normal-selected hover:border-seat-normal-selected":
             !(owned || selected) && variant === "normal" && !disabled,
           //
           "border-seat-vip text-seat-vip": variant === "vip" && !disabled,

@@ -30,7 +30,7 @@ export const reservation = async (formData: FormData) => {
   const now = dayjs(new Date());
   const expiryTime = now
     .add(RESERVATION_TIME.value, RESERVATION_TIME.unit)
-    .valueOf();
+    .toISOString();
 
   await googleServices.append({
     range: `${SheetsName.reservation}!A:C`,

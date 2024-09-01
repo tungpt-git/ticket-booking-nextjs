@@ -22,10 +22,9 @@ export const MultipleSeat = ({
         "border-2 border-solid rounded transition-all",
         `min-h-10 min-w-[88px]`,
         {
-          "hover:bg-seat-multiple border-seat-multiple": !disabled,
-          "hover:bg-opacity-30 text-seat-multiple":
+          "bg-seat-multiple border-seat-multiple text-white hover:opacity-50":
             !(owned || selected) && !disabled,
-          "border-seat-multiple-selected hover:bg-seat-multiple-selected bg-seat-multiple-selected text-white owned":
+          "border-seat-normal-selected hover:bg-seat-normal-selected bg-seat-normal-selected text-white owned":
             owned || selected,
           "cursor-pointer": !owned && !disabled,
           "border-neutral-500 bg-neutral-500 text-neutral-500": disabled,

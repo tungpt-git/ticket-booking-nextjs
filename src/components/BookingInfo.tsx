@@ -95,6 +95,7 @@ export const BookingInfo = ({
       {children}
       {showTotal && selectedSeat.length > 0 && (
         <TotalPrice
+          className="py-2"
           seats={selectedSeat}
           popcorn={popcorn}
           drink={drink}

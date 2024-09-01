@@ -7,6 +7,7 @@ type Props = ComponentProps<typeof Counter> & {
   price: number;
   label: string;
   className?: string;
+  description?: string;
 };
 
 export const CounterInput = ({
@@ -15,13 +16,15 @@ export const CounterInput = ({
   setValue,
   price,
   className,
+  description,
 }: Props) => {
   return (
     <div
       className={classNames("flex justify-between p-2 items-center", className)}
     >
       <div>
-        <div>{label}</div>
+        <div className="font-medium">{label}</div>
+        {!!description && <div className="text-xs italic">({description})</div>}
         <div className="flex items-center gap-2">
           <div className="text-sm">{formatPrice(price)}</div>
           <Counter value={value} setValue={setValue} min={0} max={100} />
