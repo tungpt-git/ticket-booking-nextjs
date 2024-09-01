@@ -1,3 +1,3 @@
 export const PlaceHolderSeat = () => (
-  <div className="border-2 w-10 h-10 invisible" />
+  <div className="border-2 min-w-10 min-h-10 invisible" />
 );

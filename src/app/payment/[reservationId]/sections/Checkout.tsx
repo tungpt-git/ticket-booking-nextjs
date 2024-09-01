@@ -10,7 +10,6 @@ import { type TUserForm } from "@/core/checkout/types";
 import {
   BookingInfo,
   Button,
-  Card,
   CounterInput,
   FileUpload,
   TotalPrice,
@@ -21,24 +20,11 @@ import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
 import { useRouter } from "next/navigation";
 
 type Props = {
-  onPayment?({
-    user,
-    bill,
-    popcorn,
-    drink,
-    combo,
-  }: {
-    user: TUserForm;
-    bill: File;
-    popcorn: number;
-    drink: number;
-    combo: number;
-  }): Promise<void>;
   selectedSeat: TSeat[];
-  paymentLoading?: boolean;
+  reservationId?: string;
 };
 
-export const Checkout = ({ selectedSeat }: Props) => {
+export const Checkout = ({ selectedSeat, reservationId }: Props) => {
   const userFormRef = useRef<HTMLFormElement | null>(null);
   const [popcorn, setPopcorn] = useState<number>(0);
   const [drink, setDrink] = useState<number>(0);
@@ -65,6 +51,7 @@ export const Checkout = ({ selectedSeat }: Props) => {
       drink,
       combo,
       seats: selectedSeat,
+      reservationId,
     });
 
     router.replace("/");
@@ -73,42 +60,44 @@ export const Checkout = ({ selectedSeat }: Props) => {
   return (
     <form ref={userFormRef} action={onSubmit}>
       <section className="flex flex-col gap-5 py-5">
-        <Card>
+        <div>
           <h4 className="font-medium text-xl">Thông tin cá nhân</h4>
           <UserInfoForm />
-        </Card>
-        <Card>
+        </div>
+        <div>
           <h4 className="font-medium text-xl">Thanh toán</h4>
           <div className="lg:flex">
             <div>
-              <BookingInfo selectedSeat={selectedSeat} />
-              <CounterInput
-                label="Bỏng?🍿"
-                price={PRICES.POPCORN}
-                value={popcorn}
-                setValue={setPopcorn}
-                className="border-b -mx-2"
-              />
-              <CounterInput
-                label="Nước?🥤"
-                price={PRICES.DRINK}
-                value={drink}
-                setValue={setDrink}
-                className="border-b -mx-2"
-              />
-              <CounterInput
-                label="Combo bỏng & nước"
-                price={PRICES.COMBO}
-                value={combo}
-                setValue={setCombo}
-                className="border-b -mx-2"
-              />
-              <TotalPrice
-                seats={selectedSeat}
-                popcorn={popcorn}
-                drink={drink}
-                combo={combo}
-              />
+              <BookingInfo selectedSeat={selectedSeat}>
+                <CounterInput
+                  label="Bỏng?🍿"
+                  price={PRICES.POPCORN}
+                  value={popcorn}
+                  setValue={setPopcorn}
+                  className="border-b -mx-2"
+                />
+                <CounterInput
+                  label="Nước?🥤"
+                  price={PRICES.DRINK}
+                  value={drink}
+                  setValue={setDrink}
+                  className="border-b -mx-2"
+                />
+                <CounterInput
+                  label="Combo bỏng & nước"
+                  price={PRICES.COMBO}
+                  value={combo}
+                  setValue={setCombo}
+                  className="border-b -mx-2"
+                />
+                <TotalPrice
+                  className="py-2"
+                  seats={selectedSeat}
+                  popcorn={popcorn}
+                  drink={drink}
+                  combo={combo}
+                />
+              </BookingInfo>
             </div>
             <div className="divider divider-horizontal" />
             <div>
@@ -147,7 +136,7 @@ export const Checkout = ({ selectedSeat }: Props) => {
               />
             </div>
           </div>
-        </Card>
+        </div>
         <Button
           variant="primary"
           loading={loading}

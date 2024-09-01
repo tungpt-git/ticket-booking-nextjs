@@ -20,7 +20,7 @@ export const PaymentInfo = ({
 }) => {
   return (
     <div
-      className="flex justify-between items-center border-b p-2 -mx-2 rounded cursor-pointer hover:bg-gray-300/30 hover:border-transparent"
+      className="flex justify-between items-center border-b p-2 -mx-2"
       onClick={onClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

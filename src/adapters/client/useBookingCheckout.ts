@@ -12,6 +12,7 @@ type Params = {
   drink: number;
   combo: number;
   seats: TSeat[];
+  reservationId?: string;
 };
 
 export const useBookingCheckout = () => {
@@ -24,6 +25,7 @@ export const useBookingCheckout = () => {
     popcorn,
     drink,
     combo,
+    reservationId,
   }: Params) => {
     if (!seats.length) return;
 
@@ -36,6 +38,9 @@ export const useBookingCheckout = () => {
     formData.append("popcorn", popcorn.toString());
     formData.append("drink", drink.toString());
     formData.append("combo", combo.toString());
+    if (reservationId) {
+      formData.append("reservationId", reservationId);
+    }
 
     await runAction?.(formData);
   };

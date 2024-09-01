@@ -3,12 +3,13 @@ import { SheetsName } from "@/configs/google-sheets";
 import { googleServices } from "@/services/googleapis";
 import dayjs from "dayjs";
 import { ERROR_CODES } from "@/core/errors/code";
-import { JOIN_CHARACTER } from "@/core/reservation";
+import { JOIN_CHARACTER, RESERVATION_TIME } from "@/core/reservation";
 import { v4 as uuidv4 } from "uuid";
 import { checkExist } from "./check-exist";
 
 export const reservation = async (formData: FormData) => {
   const id = formData.get("id");
+  if (!id) return;
   const seatIds = ((formData.get("seatIds") as string) ?? "").split(
     JOIN_CHARACTER
   );
@@ -27,7 +28,9 @@ export const reservation = async (formData: FormData) => {
   }
 
   const now = dayjs(new Date());
-  const expiryTime = now.add(15, "minutes").valueOf();
+  const expiryTime = now
+    .add(RESERVATION_TIME.value, RESERVATION_TIME.unit)
+    .valueOf();
 
   await googleServices.append({
     range: `${SheetsName.reservation}!A:C`,

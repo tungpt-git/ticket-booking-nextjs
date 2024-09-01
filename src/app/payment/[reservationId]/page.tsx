@@ -18,7 +18,10 @@ export default async function Payment({ params }: { params: Params }) {
   return (
     <main className="min-w-screen min-h-screen flex items-center justify-center">
       <Timer expiryTime={reservation.expiryTime} />
-      <Checkout selectedSeat={reservation.seatIds.map((id) => seats[id])} />
+      <Checkout
+        selectedSeat={reservation.seatIds.map((id) => seats[id])}
+        reservationId={params.reservationId}
+      />
     </main>
   );
 }

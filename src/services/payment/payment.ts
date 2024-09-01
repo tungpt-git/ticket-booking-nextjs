@@ -1,4 +1,6 @@
 "use server";
+import { SheetsName } from "@/configs/google-sheets";
+import { googleServices } from "../googleapis";
 import { upload } from "../googleapis/upload";
 import { seatService } from "../seats";
 import { revalidatePath } from "next/cache";
@@ -12,10 +14,20 @@ type Data = {
   popcorn: string;
   drink: string;
   combo: string;
+  reservationId?: string;
 };
 export const handlePayment = async (formData: FormData) => {
-  const { seats, name, email, phone, bill, popcorn, drink, combo } =
-    Object.fromEntries(formData) as unknown as Data;
+  const {
+    seats,
+    name,
+    email,
+    phone,
+    bill,
+    popcorn,
+    drink,
+    combo,
+    reservationId,
+  } = Object.fromEntries(formData) as unknown as Data;
 
   let fileId: string = "";
   try {
@@ -39,6 +51,14 @@ export const handlePayment = async (formData: FormData) => {
         combo: +combo,
       }
     );
+
+    if (reservationId) {
+      await googleServices.searchAndDeleteRow({
+        range: `${SheetsName.reservation}!A:A`,
+        searchValue: reservationId,
+      });
+    }
+
     revalidatePath("/booking");
   } catch (error) {
     // do nothing

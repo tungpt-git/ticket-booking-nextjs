@@ -1,11 +1,14 @@
 import { formatPrice, PRICES, sumPrice } from "@/core/seat/price";
 import { TSeat } from "@/core/seat/types";
+import classNames from "classnames";
 
 type Props = {
   popcorn?: number;
   combo?: number;
   drink?: number;
   seats: TSeat[];
+  hideLabel?: boolean;
+  className?: string;
 };
 
 export const TotalPrice = ({
@@ -13,6 +16,8 @@ export const TotalPrice = ({
   popcorn = 0,
   combo = 0,
   drink = 0,
+  hideLabel = false,
+  className,
 }: Props) => {
   const foods = [
     {
@@ -37,9 +42,9 @@ export const TotalPrice = ({
   );
 
   return (
-    <div className="flex justify-between py-2">
-      <span className="font-medium">Tổng cộng:</span>
-      <span className="font-medium">{totalPrice}</span>
+    <div className={classNames("flex justify-between font-medium", className)}>
+      {!hideLabel && <span>Tổng cộng:</span>}
+      <span>{totalPrice}</span>
     </div>
   );
 };

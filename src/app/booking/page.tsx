@@ -36,8 +36,6 @@ export default async function BookingPage(): Promise<ReactElement> {
     return [...acc, ...cur.seatIds.map((id) => seats[id])];
   }, [] as TSeat[]);
 
-  console.log("reservation", reservation);
-
   return (
     <main>
       {/* <div className="navbar flex gap-2 w-full justify-end px-24">

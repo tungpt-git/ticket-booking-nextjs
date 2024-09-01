@@ -22,7 +22,8 @@ export const SingleSeat = ({
   return (
     <div
       className={classNames(
-        "border-2 border-solid border-seat-normal rounded w-5 h-5 lg:w-10 lg:h-10 transition-all",
+        "border-2 border-solid border-seat-normal rounded transition-all",
+        "min-w-10 min-h-10",
         {
           "hover:bg-opacity-30": !(owned || selected) && !disabled,
           //

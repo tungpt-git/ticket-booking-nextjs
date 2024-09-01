@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   mode: "jit",
@@ -86,6 +87,22 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [
+    plugin(({ matchUtilities, theme }: any) => {
+      matchUtilities(
+        {
+          "animation-delay": (value: any) => {
+            return {
+              "animation-delay": value,
+            };
+          },
+        },
+        {
+          values: theme("transitionDelay"),
+        }
+      );
+    }),
+    require("daisyui"),
+  ],
 };
 export default config;

@@ -3,14 +3,17 @@ import { labelLookup, TSeat } from "@/core/seat/types";
 import { formatPrice, PRICES, sumPrice } from "@/core/seat/price";
 import { TotalPrice } from "./TotalPrice";
 import { PaymentInfo } from "./PaymentInfo";
+import { PropsWithChildren } from "react";
+import classNames from "classnames";
 
-type Props = {
+type Props = PropsWithChildren & {
   selectedSeat: TSeat[];
   setPreviewType?(type: TSeat["type"] | null): void;
   popcorn?: number;
   combo?: number;
   drink?: number;
   showTotal?: boolean;
+  className?: string;
 };
 
 export const BookingInfo = ({
@@ -20,6 +23,8 @@ export const BookingInfo = ({
   combo = 0,
   drink = 0,
   showTotal = false,
+  children,
+  className,
 }: Props) => {
   const seatGroupByType = groupBy(selectedSeat, (el) => el.type);
 
@@ -42,9 +47,14 @@ export const BookingInfo = ({
   ];
 
   return (
-    <div className="min-w-[360px] flex flex-col">
+    <div
+      className={classNames(
+        "min-w-[360px] flex flex-col overflow-y-auto overflow-x-hidden",
+        className
+      )}
+    >
       {!selectedSeat.length ? (
-        <div className="rounded border-2 border-dashed border-gray-300 min-h-[400px] w-full flex items-center justify-center text-gray-300 font-medium">
+        <div className="rounded border-2 border-dashed border-gray-300 min-h-[448px] w-full flex items-center justify-center text-gray-300 font-medium">
           Ghế bạn chọn sẽ hiển thị ở đây
         </div>
       ) : (
@@ -82,6 +92,7 @@ export const BookingInfo = ({
             />
           ))}
       </>
+      {children}
       {showTotal && selectedSeat.length > 0 && (
         <TotalPrice
           seats={selectedSeat}

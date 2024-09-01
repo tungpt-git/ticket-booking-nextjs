@@ -1,6 +1,6 @@
 "use client";
-import React, { Fragment, useState } from "react";
-import { useSession } from "next-auth/react";
+import React, { Fragment } from "react";
+import classNames from "classnames";
 //
 import groupBy from "lodash-es/groupBy";
 import orderBy from "lodash-es/orderBy";
@@ -8,7 +8,6 @@ import orderBy from "lodash-es/orderBy";
 import { SeatLabel } from "../_components/SeatLabel";
 import { SingleSeat } from "../_components/SingleSeat";
 import { MultipleSeat } from "../_components/MultipleSeat";
-import { PlaceHolderSeat } from "../_components/PlaceHolderSeat";
 import { SeatLengend } from "../_components/SeatLengend";
 //
 import { type TSeat } from "@/core/seat/types";
@@ -30,8 +29,7 @@ export function Room({
   selectedSeat,
   setSelectedSeat,
 }: Props) {
-  const { data: session } = useSession();
-  const currentUser = session?.user?.email ?? "";
+  const currentUser = "";
   //
   const rows = groupBy(seats, (x) => x.rowName);
   //
@@ -56,40 +54,46 @@ export function Room({
 
   return (
     <div>
-      <div className="text-center text-2xl mb-4 animate-bounce">
+      <div className="text-center text-2xl mt-6 animate-bounce">
         <span className="inline-block">🍿🍿</span>
         {" ĐÂY LÀ MÀN HÌNH "}
         <span className="inline-block">🍿🍿</span>
       </div>
-      <div className="flex flex-col items-center gap-1 lg:gap-2 lg:p-6">
-        {Object.keys(rows).map((row) => (
-          <Fragment key={row}>
-            <div className="flex items-center gap-1 lg:gap-2 justify-between">
-              {Array.from({ length: slotCount }).map((_, idx) => {
-                const seat = orderBy(rows[row], (x) =>
-                  Array.isArray(x.idx) ? x.idx[0] : x.idx
-                )[idx];
-                if (!seat) return null;
-                return (
-                  <Seat
-                    key={seat.id}
-                    seat={seat}
-                    selected={isSelectedSeat(seat)}
-                    onSelect={() => onSelect(seat)}
-                    disabled={disabledSeat.includes(seat.id)}
-                    owned={
-                      Boolean(
-                        previewType &&
-                          previewType !== seat.type &&
-                          isSelectedSeat(seat)
-                      ) || ownedSeat.includes(seat.id)
-                    }
-                  />
-                );
-              })}
-            </div>
-          </Fragment>
-        ))}
+      <div className="overflow-auto">
+        <div className="flex flex-col gap-1 lg:gap-2 p-6 w-fit">
+          {Object.keys(rows).map((row) => (
+            <Fragment key={row}>
+              <div
+                className={classNames("flex gap-1 lg:gap-2 justify-between", {
+                  "mx-auto": rows[row].length < slotCount,
+                })}
+              >
+                {Array.from({ length: slotCount }).map((_, idx) => {
+                  const seat = orderBy(rows[row], (x) =>
+                    Array.isArray(x.idx) ? x.idx[0] : x.idx
+                  )[idx];
+                  if (!seat) return null;
+                  return (
+                    <Seat
+                      key={seat.id}
+                      seat={seat}
+                      selected={isSelectedSeat(seat)}
+                      onSelect={() => onSelect(seat)}
+                      disabled={disabledSeat.includes(seat.id)}
+                      owned={
+                        Boolean(
+                          previewType &&
+                            previewType !== seat.type &&
+                            isSelectedSeat(seat)
+                        ) || ownedSeat.includes(seat.id)
+                      }
+                    />
+                  );
+                })}
+              </div>
+            </Fragment>
+          ))}
+        </div>
       </div>
       <Legends />
     </div>
@@ -98,7 +102,7 @@ export function Room({
 
 const Legends = () => {
   return (
-    <div className="flex gap-6 mt-2">
+    <div className="flex gap-6 mt-2 px-3">
       <div>
         <div className="flex gap-1">
           <SeatLengend type="normal">
@@ -112,7 +116,7 @@ const Legends = () => {
         <SeatLengend type="multiple" showLabel label="Ghế đôi" />
       </div>
       <div>
-        <SeatLengend type="normal" selected showLabel label="Ghế được chọn" />
+        <SeatLengend type="normal" selected showLabel label="Ghế đang chọn" />
         <SeatLengend type="normal" disabled showLabel label="Ghế đã bán" />
       </div>
     </div>
@@ -132,35 +136,29 @@ const Seat = ({
   owned?: boolean;
   onSelect?: VoidFunction;
 }) => {
-  if (seat.type === "placeholder") return <PlaceHolderSeat key={seat.id} />;
-
   if (Array.isArray(seat.idx) && seat.idx.length > 1) {
     return (
-      <Fragment key={seat.id}>
-        <MultipleSeat
-          count={seat.idx.length}
-          selected={selected}
-          onSelect={onSelect}
-          disabled={disabled}
-          owned={owned}
-        >
-          <SeatLabel>{seat.name}</SeatLabel>
-        </MultipleSeat>
-      </Fragment>
-    );
-  }
-
-  return (
-    <Fragment key={seat.id}>
-      <SingleSeat
+      <MultipleSeat
+        count={seat.idx.length}
         selected={selected}
         onSelect={onSelect}
-        variant={seat.type}
         disabled={disabled}
         owned={owned}
       >
         <SeatLabel>{seat.name}</SeatLabel>
-      </SingleSeat>
-    </Fragment>
+      </MultipleSeat>
+    );
+  }
+
+  return (
+    <SingleSeat
+      selected={selected}
+      onSelect={onSelect}
+      variant={seat.type}
+      disabled={disabled}
+      owned={owned}
+    >
+      <SeatLabel>{seat.name}</SeatLabel>
+    </SingleSeat>
   );
 };

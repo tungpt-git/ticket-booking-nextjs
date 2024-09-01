@@ -10,6 +10,7 @@ export const booking: TSeatService["booking"] = async (
   bill,
   { popcorn, drink, combo }
 ) => {
+  console.log("=== booking ===");
   if (!seats.length) return;
 
   const seatGroupedByType = groupBy(seats, "type");
@@ -37,5 +38,5 @@ export const booking: TSeatService["booking"] = async (
     drink,
     combo,
   });
-  console.log("res", res);
+  console.log("booking result: ", res);
 };

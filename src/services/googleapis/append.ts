@@ -2,7 +2,7 @@
 
 import { google, sheets_v4 } from "googleapis";
 import { initClient } from "./init-client";
-import { GOOGLE_SHEET_ID } from "@/configs/google-api";
+import { GOOGLE_SPREADSHEET_ID } from "@/configs/google-api";
 
 export async function append(
   params: sheets_v4.Params$Resource$Spreadsheets$Values$Append,
@@ -13,7 +13,7 @@ export async function append(
 
   const data = await sheets.spreadsheets.values.append({
     ...params,
-    spreadsheetId: GOOGLE_SHEET_ID,
+    spreadsheetId: GOOGLE_SPREADSHEET_ID,
   });
 
   return data;

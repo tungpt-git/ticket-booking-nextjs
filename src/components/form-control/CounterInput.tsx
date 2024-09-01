@@ -22,8 +22,10 @@ export const CounterInput = ({
     >
       <div>
         <div>{label}</div>
-        <div className="text-sm mb-1">{formatPrice(price)}</div>
-        <Counter value={value} setValue={setValue} min={0} max={100} />
+        <div className="flex items-center gap-2">
+          <div className="text-sm">{formatPrice(price)}</div>
+          <Counter value={value} setValue={setValue} min={0} max={100} />
+        </div>
       </div>
       <span>{`${formatPrice(value * price)}`}</span>
     </div>
