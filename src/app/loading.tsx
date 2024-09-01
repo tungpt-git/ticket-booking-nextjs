@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="absolute w-screen h-screen flex items-center justify-center">
+    <div className="fixed w-screen h-screen flex items-center justify-center overflow-hidden">
       <span className="animate-bounce text-3xl font-medium animation-delay-0 text-primary">
         F
       </span>
