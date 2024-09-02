@@ -6,7 +6,7 @@ import { type TSeat } from "@/core/seat/types";
 import { PRICES } from "@/core/seat/price";
 import { ALLOWED_IMAGES_MIME_TYPE, MAX_FILE_SIZE } from "@/core";
 import { type TUserForm } from "@/core/checkout/types";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 //
 import { BookingInfo, Button, CounterInput, FileUpload } from "@/components";
 //
@@ -25,8 +25,6 @@ export const Checkout = ({ selectedSeat }: Props) => {
   const [combo, setCombo] = useState<number>(0);
 
   const { checkout, loading } = useBookingCheckout();
-
-  const router = useRouter();
 
   const onSubmit = async (formData: FormData) => {
     const data = Object.fromEntries(formData) as TUserForm & { bill: File };
@@ -47,8 +45,6 @@ export const Checkout = ({ selectedSeat }: Props) => {
       seats: selectedSeat,
       reservationId: params.reservationId,
     });
-
-    router.replace("/booking");
   };
 
   const foods = [

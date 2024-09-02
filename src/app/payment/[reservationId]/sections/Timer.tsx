@@ -23,7 +23,7 @@ export const Timer = ({ expiryTime }: Props) => {
   const min = Math.floor(remainingSeconds / 60);
   const sec = Math.round(remainingSeconds % 60);
   return (
-    <div className="fixed top-[72px] right-2 z-20">
+    <div className="fixed top-2 right-2 z-20">
       <div className="bg-gray-500 text-white py-1 px-3 text-center">
         <span className="countdown font-mono text-2xl">
           <span style={{ "--value": min }}></span>:

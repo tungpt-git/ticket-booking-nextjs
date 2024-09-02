@@ -4,6 +4,7 @@ import { TSeat } from "@/core/seat/types";
 import { TUser } from "@/core/user/type";
 import { handlePayment } from "@/services/payment/payment";
 import { useServerAction } from "@/utils/hooks/useServerAction";
+import { useRouter } from "next/navigation";
 
 type Params = {
   user: TUser;
@@ -17,6 +18,7 @@ type Params = {
 
 export const useBookingCheckout = () => {
   const [runAction, loading] = useServerAction(handlePayment);
+  const router = useRouter();
 
   const checkout = async ({
     seats,
@@ -43,6 +45,7 @@ export const useBookingCheckout = () => {
     }
 
     await runAction?.(formData);
+    router.push("/success");
   };
 
   return { checkout, loading };
