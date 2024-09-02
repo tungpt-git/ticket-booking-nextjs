@@ -10,6 +10,6 @@ export type TSeat = {
 
 export const labelLookup: Partial<Record<TSeat["type"], string>> = {
   normal: "Ghế thường",
-  vip: "Ghế VIP",
+  vip: "Ghế gần",
   multiple: "Ghế đôi",
 };

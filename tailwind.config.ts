@@ -22,18 +22,18 @@ const config: Config = {
       colors: {
         seat: {
           normal: {
-            DEFAULT: "#737373",
-            selected: "#3B82F6",
+            DEFAULT: "rgb(64 64 64)",
+            selected: "rgb(59 130 246)",
           },
           vip: {
-            DEFAULT: "#F59E0B",
-            selected: "#3B82F6",
+            DEFAULT: "rgb(180 83 9)",
+            selected: "rgb(59 130 246)",
           },
           multiple: {
-            DEFAULT: "#D946EF",
-            selected: "#3B82F6",
+            DEFAULT: "rgb(162 28 175)",
+            selected: "rgb(59 130 246)",
           },
-          disabled: "#737373",
+          disabled: "rgb(225 29 72)",
         },
       },
     },

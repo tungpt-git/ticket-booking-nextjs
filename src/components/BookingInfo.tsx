@@ -26,7 +26,7 @@ export const BookingInfo = ({
   children,
   className,
 }: Props) => {
-  const seatGroupByType = groupBy(selectedSeat, (el) => el.type);
+  const seatGroupedByType = groupBy(selectedSeat, "type");
 
   const foods = [
     {
@@ -59,16 +59,16 @@ export const BookingInfo = ({
         </div>
       ) : (
         <>
-          {Object.keys(seatGroupByType).map((type) => {
+          {Object.keys(seatGroupedByType).map((type) => {
             return (
               <PaymentInfo
                 key={type}
                 label={labelLookup[type as keyof typeof labelLookup] ?? ""}
-                description={seatGroupByType[type]
+                description={seatGroupedByType[type]
                   .map((el) => el.name)
                   .join(", ")}
-                count={seatGroupByType[type].length}
-                price={formatPrice(sumPrice(seatGroupByType[type]))}
+                count={seatGroupedByType[type].length}
+                price={formatPrice(sumPrice(seatGroupedByType[type]))}
                 onMouseEnter={() => {
                   setPreviewType?.(type as TSeat["type"]);
                 }}

@@ -30,9 +30,9 @@ export function SeatLengend({
                   "border-seat-disabled bg-seat-disabled": true,
                 }
               : {
-                  "border-seat-normal": type === "normal",
-                  "border-seat-vip": type === "vip",
-                  "border-seat-multiple": type === "multiple",
+                  "bg-seat-normal border-seat-normal": type === "normal",
+                  "bg-seat-vip border-seat-vip": type === "vip",
+                  "bg-seat-multiple border-seat-multiple": type === "multiple",
                 }),
             ...(selected && {
               "border-seat-normal-selected bg-seat-normal-selected":

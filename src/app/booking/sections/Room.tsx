@@ -60,7 +60,7 @@ export function Room({
         <span className="inline-block">🍿🍿</span>
       </div>
       <div className="overflow-auto">
-        <div className="flex flex-col gap-1 lg:gap-2 p-6 w-fit">
+        <div className="flex flex-col gap-1 lg:gap-2 p-6 w-fit mx-auto">
           {Object.keys(rows).map((row) => (
             <Fragment key={row}>
               <div
@@ -104,14 +104,7 @@ const Legends = () => {
   return (
     <div className="flex gap-6 mt-2 px-3">
       <div>
-        <div className="flex gap-1">
-          <SeatLengend type="normal">
-            <span className="text-[10px]">A</span>
-          </SeatLengend>
-          <SeatLengend type="normal" showLabel label="Ghế 120k">
-            <span className="text-[10px]">B</span>
-          </SeatLengend>
-        </div>
+        <SeatLengend type="vip" showLabel label="Ghế gần" />
         <SeatLengend type="normal" showLabel label="Ghế thường" />
         <SeatLengend type="multiple" showLabel label="Ghế đôi" />
       </div>
