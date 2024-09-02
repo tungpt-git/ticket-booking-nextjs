@@ -115,8 +115,9 @@ export const Checkout = ({ selectedSeat }: Props) => {
               />
 
               <FileUpload
+                label="Vui lòng tải ảnh chụp màn hình chuyển khoản"
                 name="bill"
-                className="mt-4 m-auto"
+                className="m-auto"
                 required
                 accept={ALLOWED_IMAGES_MIME_TYPE.join(",")}
                 onChange={(evt) => {

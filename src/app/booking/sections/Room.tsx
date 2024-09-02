@@ -104,9 +104,9 @@ const Legends = () => {
   return (
     <div className="flex gap-6 mt-2 px-3">
       <div>
-        <SeatLengend type="vip" showLabel label="Ghế gần" />
-        <SeatLengend type="normal" showLabel label="Ghế thường" />
-        <SeatLengend type="multiple" showLabel label="Ghế đôi" />
+        <SeatLengend type="vip" showLabel />
+        <SeatLengend type="normal" showLabel />
+        <SeatLengend type="multiple" showLabel />
       </div>
       <div>
         <SeatLengend type="normal" selected showLabel label="Ghế đang chọn" />

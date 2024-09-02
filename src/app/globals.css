@@ -10,7 +10,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: oklch(100% 3.5594404384177905e-8 106.37411429114086);
+    --foreground-oklch: oklch(100% 3.5594404384177905e-8 106.37411429114086);
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
