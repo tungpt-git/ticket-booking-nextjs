@@ -3,6 +3,7 @@ import { bookingSeats } from "../apis/booking/booking-seats";
 import { TSeatService } from "../port";
 import { labelLookup, TSeat } from "@/core/seat/types";
 import { calcBillTotal } from "@/core/seat/price";
+import { sendBookingNotification } from "../email/booking-notification";
 
 export const booking: TSeatService["booking"] = async (
   seats,
@@ -25,6 +26,7 @@ export const booking: TSeatService["booking"] = async (
     .join(", ");
 
   const notes = `${seatPlainText}`;
+  const total = calcBillTotal({ seats, popcorn, drink, combo });
   const res = await bookingSeats({
     name: user.name,
     email: user.email,
@@ -34,6 +36,17 @@ export const booking: TSeatService["booking"] = async (
     notes,
     bill,
     total: calcBillTotal({ seats, popcorn, drink, combo }),
+    popcorn,
+    drink,
+    combo,
+  });
+
+  sendBookingNotification({
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    seats: seats.map((seat) => seat.id).join(" "),
+    total,
     popcorn,
     drink,
     combo,
