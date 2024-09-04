@@ -60,11 +60,11 @@ export function Room({
         <span className="inline-block">🍿🍿</span>
       </div>
       <div className="overflow-auto">
-        <div className="flex flex-col gap-1 lg:gap-2 p-6 w-fit mx-auto">
+        <div className="flex flex-col gap-2 lg:gap-2 p-6 w-fit mx-auto">
           {Object.keys(rows).map((row) => (
             <Fragment key={row}>
               <div
-                className={classNames("flex gap-1 lg:gap-2 justify-between", {
+                className={classNames("flex gap-2 lg:gap-2 justify-between", {
                   "mx-auto": rows[row].length < slotCount,
                 })}
               >
@@ -102,7 +102,7 @@ export function Room({
 
 const Legends = () => {
   return (
-    <div className="flex gap-6 mt-2 px-3">
+    <div className="flex gap-6 px-3">
       <div>
         <SeatLengend type="vip" showLabel />
         <SeatLengend type="normal" showLabel />

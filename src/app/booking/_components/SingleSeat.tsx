@@ -22,25 +22,23 @@ export const SingleSeat = ({
   return (
     <div
       className={classNames(
-        "border-2 border-solid border-seat-normal rounded transition-all text-slate-100",
-        "min-w-10 min-h-10",
+        "rounded transition-all text-slate-100 flex items-center justify-center",
+        "lg:min-w-10 lg:min-h-10",
+        "min-w-8 min-h-8",
         {
-          "hover:opacity-50": !(owned || selected) && !disabled,
+          "lg:hover:opacity-50": !(owned || selected) && !disabled,
           //
-          "bg-seat-normal-selected !border-seat-normal-selected":
-            (owned || selected) && variant === "normal" && !disabled,
-          "bg-seat-normal hover:bg-seat-normal-selected hover:border-seat-normal-selected":
-            !(owned || selected) && variant === "normal" && !disabled,
+          "bg-seat-normal":
+            variant === "normal" && !(owned || selected) && !disabled,
+          "bg-seat-normal-selected":
+            variant === "normal" && (owned || selected) && !disabled,
           //
-          "bg-seat-vip border-seat-vip": variant === "vip" && !disabled,
-          "bg-seat-vip border-seat-vip-selected bg-seat-vip-selected":
-            (owned || selected) && variant === "vip" && !disabled,
-          "hover:bg-seat-vip":
-            !(owned || selected) && variant === "vip" && !disabled,
+          "bg-seat-vip": variant === "vip" && !(owned || selected) && !disabled,
+          "bg-seat-vip-selected":
+            variant === "vip" && (owned || selected) && !disabled,
           //
           "cursor-pointer": !owned && !disabled,
-          "!border-seat-disabled bg-seat-disabled !text-seat-disabled":
-            disabled,
+          "bg-seat-disabled !text-seat-disabled": disabled,
           "cursor-not-allowed": owned || disabled,
         },
         className

@@ -31,6 +31,12 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  .border-light {
+    border-color: #e5e7eb;
+  }
+  .border-dark {
+    border-color: oklch(25.3267% 0.015896 252.417568);
+  }
 }
 
 @layer base {
@@ -38,5 +44,19 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  }
+  .border,
+  .border-t,
+  .border-l,
+  .border-b,
+  .border-r {
+    @apply border-light dark:border-dark;
+  }
+  .label {
+    padding-top: 0 !important;
+  }
+  .divider.divider-horizontal:after,
+  .divider.divider-horizontal:before {
+    width: 1px;
   }
 }

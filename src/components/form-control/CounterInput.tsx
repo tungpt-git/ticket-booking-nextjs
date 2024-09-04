@@ -19,12 +19,10 @@ export const CounterInput = ({
   description,
 }: Props) => {
   return (
-    <div
-      className={classNames("flex justify-between p-2 items-center", className)}
-    >
+    <div className={classNames("flex justify-between items-center", className)}>
       <div>
         <div className="font-medium">{label}</div>
-        {!!description && <div className="text-xs italic">({description})</div>}
+        {!!description && <div className="text-sm italic">({description})</div>}
         <div className="flex items-center gap-2">
           <div className="text-sm">{formatPrice(price)}</div>
           <Counter value={value} setValue={setValue} min={0} max={100} />

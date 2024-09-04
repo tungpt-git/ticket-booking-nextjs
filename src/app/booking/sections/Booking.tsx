@@ -5,7 +5,7 @@ import { type TSeat } from "@/core/seat/types";
 import { TUser } from "@/core/user/type";
 //
 import { Room } from "./Room";
-import { Payment } from "./Payment";
+import { Info } from "./Info";
 //
 import { useReservation } from "@/adapters/client/useReservation";
 
@@ -41,7 +41,7 @@ export function Booking({ bookedSeats: _bookedSeats = [], seats }: Props) {
           previewType={previewType}
         />
 
-        <Payment
+        <Info
           loading={reservationLoading}
           selectedSeat={selectedSeat}
           setPreviewType={setPreviewType}

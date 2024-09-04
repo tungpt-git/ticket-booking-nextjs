@@ -1,23 +1,31 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, {
+  ComponentProps,
+  PropsWithChildren,
+  useRef,
+  useState,
+} from "react";
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import classNames from "classnames";
 //
 import { type TSeat } from "@/core/seat/types";
 import { PRICES } from "@/core/seat/price";
 import { ALLOWED_IMAGES_MIME_TYPE, MAX_FILE_SIZE } from "@/core";
 import { type TUserForm } from "@/core/checkout/types";
-import { useParams } from "next/navigation";
 //
 import { BookingInfo, Button, CounterInput, FileUpload } from "@/components";
 //
 import { UserInfoForm } from "../_components/UserInfoForm";
 import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
+import { Timer } from "../_components/Timer";
 
 type Props = {
   selectedSeat: TSeat[];
+  expiryTime: number;
 };
 
-export const Checkout = ({ selectedSeat }: Props) => {
+export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
   const params = useParams<{ reservationId?: string }>();
   const userFormRef = useRef<HTMLFormElement | null>(null);
   const [popcorn, setPopcorn] = useState<number>(0);
@@ -49,21 +57,21 @@ export const Checkout = ({ selectedSeat }: Props) => {
 
   const foods = [
     {
-      label: "Bỏng?🍿",
+      label: "🍿Bỏng",
       price: PRICES.POPCORN,
       value: popcorn,
       setValue: setPopcorn,
       description: "1 bỏng tùy chọn caramel/thường",
     },
     {
-      label: "Nước?🥤",
+      label: "🥤Nước",
       price: PRICES.DRINK,
       value: drink,
       setValue: setDrink,
       description: "1 nước tùy chọn 7up/Pepsi",
     },
     {
-      label: "Combo bỏng & nước 🍿🥤",
+      label: "🍿🥤Combo bỏng & nước",
       price: PRICES.COMBO,
       value: combo,
       setValue: setCombo,
@@ -73,25 +81,24 @@ export const Checkout = ({ selectedSeat }: Props) => {
 
   return (
     <form ref={userFormRef} action={onSubmit}>
-      <section className="flex flex-col gap-5 py-2">
-        <div>
-          <h4 className="font-medium text-xl">Thông tin cá nhân</h4>
+      <section className="grid grid-cols-1	gap-5 px-3">
+        <Block title="Thông tin cá nhân">
           <UserInfoForm />
-        </div>
-        {foods.map((food) => (
-          <CounterInput
-            key={food.label}
-            label={food.label}
-            price={food.price}
-            value={food.value}
-            setValue={food.setValue}
-            className="p-2 border border-solid rounded"
-            description={food.description}
-          />
-        ))}
-
-        <div>
-          <h4 className="font-medium text-xl">Thanh toán</h4>
+        </Block>
+        <Block title="Chọn đồ ăn">
+          {foods.map((food) => (
+            <CounterInput
+              key={food.label}
+              className="mb-4"
+              label={food.label}
+              price={food.price}
+              value={food.value}
+              setValue={food.setValue}
+              description={food.description}
+            />
+          ))}
+        </Block>
+        <Block title="Thanh toán" forceOpen>
           <div className="lg:flex">
             <div>
               <BookingInfo
@@ -101,9 +108,12 @@ export const Checkout = ({ selectedSeat }: Props) => {
                 combo={combo}
                 showTotal
               />
+              <p className="font-medium italic text-error">
+                * Lưu ý: Vé đã mua không hoàn lại, xin cảm ơn.
+              </p>
             </div>
             <div className="divider divider-horizontal" />
-            <div>
+            <div className="mt-4 lg:mt-0">
               <Image
                 className="m-auto"
                 alt="bank_account_qr"
@@ -117,7 +127,7 @@ export const Checkout = ({ selectedSeat }: Props) => {
               <FileUpload
                 label="Vui lòng tải ảnh chụp màn hình chuyển khoản"
                 name="bill"
-                className="m-auto"
+                className="mt-4"
                 required
                 accept={ALLOWED_IMAGES_MIME_TYPE.join(",")}
                 onChange={(evt) => {
@@ -140,7 +150,8 @@ export const Checkout = ({ selectedSeat }: Props) => {
               />
             </div>
           </div>
-        </div>
+        </Block>
+        <Timer expiryTime={expiryTime} />
         <Button
           variant="primary"
           loading={loading}
@@ -151,5 +162,44 @@ export const Checkout = ({ selectedSeat }: Props) => {
         </Button>
       </section>
     </form>
+  );
+};
+
+const Block = ({
+  title,
+  children,
+  forceOpen: _forceOpen,
+  ...props
+}: PropsWithChildren<ComponentProps<"div">> & {
+  title?: string;
+  forceOpen?: boolean;
+}) => {
+  const [open, setOpen] = useState(true);
+  const forceOpen = _forceOpen || !title;
+  return (
+    <div
+      {...props}
+      className={classNames(
+        "collapse bg-base-200 border rounded-lg border-solid",
+        props.className,
+        { "collapse-open": open || forceOpen }
+      )}
+    >
+      <input
+        className={classNames({ "cursor-pointer": !forceOpen })}
+        type="checkbox"
+        checked={open}
+        onChange={(evt) => setOpen(evt.target.checked)}
+      />
+      {!!title && (
+        <h4 className={classNames("collapse-title font-medium text-xl p-4")}>
+          {title}
+        </h4>
+      )}
+      <div className="collapse-content border-t border-dashed">
+        <div className="h-4" />
+        {children}
+      </div>
+    </div>
   );
 };

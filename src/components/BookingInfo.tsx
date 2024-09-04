@@ -49,12 +49,12 @@ export const BookingInfo = ({
   return (
     <div
       className={classNames(
-        "min-w-[360px] flex flex-col overflow-y-auto overflow-x-hidden",
+        "lg:min-w-[360px] flex flex-col overflow-y-auto overflow-x-hidden",
         className
       )}
     >
       {!selectedSeat.length ? (
-        <div className="rounded border-2 border-dashed border-gray-300 min-h-[448px] w-full flex items-center justify-center text-gray-300 font-medium">
+        <div className="rounded border-2 border-dashed border-light min-h-[448px] w-full flex items-center justify-center text-gray-300 font-medium">
           Ghế bạn chọn sẽ hiển thị ở đây
         </div>
       ) : (

@@ -23,25 +23,23 @@ export function SeatLengend({
     <div className="flex gap-1 items-center">
       <div
         className={classNames(
-          "h-4 w-4 rounded border-2 flex items-center justify-center",
+          "h-4 w-4 rounded flex items-center justify-center",
           {
             ...(disabled
               ? {
-                  "border-seat-disabled bg-seat-disabled": true,
+                  "bg-seat-disabled": true,
                 }
               : {
-                  "bg-seat-normal border-seat-normal": type === "normal",
-                  "bg-seat-vip border-seat-vip": type === "vip",
-                  "bg-seat-multiple border-seat-multiple": type === "multiple",
+                  "bg-seat-normal": type === "normal",
+                  "bg-seat-vip": type === "vip",
+                  "bg-seat-multiple": type === "multiple",
                 }),
             ...(selected && {
-              "border-seat-normal-selected bg-seat-normal-selected":
-                type === "normal",
+              "bg-seat-normal-selected": type === "normal",
               "bg-seat-vip-selected": type === "vip",
               "bg-seat-multiple-selected": type === "multiple",
             }),
-            "opacity-30 border-seat-normal-selected bg-seat-normal-selected":
-              owned,
+            "opacity-30 bg-seat-normal-selected": owned,
           }
         )}
       >

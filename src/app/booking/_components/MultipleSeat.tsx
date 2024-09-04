@@ -19,15 +19,16 @@ export const MultipleSeat = ({
   return (
     <div
       className={classNames(
-        "border-2 border-solid rounded transition-all text-slate-100",
-        `min-h-10 min-w-[88px]`,
+        "rounded transition-all text-slate-100 flex items-center justify-center",
+        `lg:min-h-10 lg:min-w-[88px]`,
+        `min-h-8 min-w-[70px]`,
         {
-          "bg-seat-multiple border-seat-multiple hover:opacity-50":
+          "bg-seat-multiple lg:hover:opacity-50":
             !(owned || selected) && !disabled,
-          "border-seat-normal-selected hover:bg-seat-normal-selected bg-seat-normal-selected owned":
+          "lg:hover:bg-seat-normal-selected bg-seat-normal-selected owned":
             owned || selected,
           "cursor-pointer": !owned && !disabled,
-          "border-seat-disabled bg-seat-disabled text-seat-disabled": disabled,
+          "bg-seat-disabled !text-seat-disabled": disabled,
           "cursor-not-allowed": owned || disabled,
         }
       )}

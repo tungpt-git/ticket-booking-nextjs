@@ -15,7 +15,7 @@ export const FileUpload = ({
   ...props
 }: Props) => {
   return (
-    <label className={classNames("form-control w-full max-w-xs", className)}>
+    <label className={classNames("form-control w-full", className)}>
       {!!label && <Label {...props}>{label}</Label>}
 
       <input

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-  title: "FRIENDS OFFLINE 2024 TICKET BOOKING",
+  title: "FRIENDS OFFLINE 2024",
 };
 
 export default function RootLayout({
