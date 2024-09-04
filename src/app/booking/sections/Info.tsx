@@ -23,8 +23,8 @@ export function Info({
         <div className="w-full flex justify-between items-center p-2 bg-blue-600 text-white">
           <span>
             <span className="inline-block">
-              <TotalPrice seats={selectedSeat} hideLabel />{" "}
-            </span>
+              <TotalPrice seats={selectedSeat} hideLabel />
+            </span>{" "}
             <span>({selectedSeat.length} ghế)</span>
           </span>
           <Button
