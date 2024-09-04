@@ -1,6 +1,5 @@
 import { SheetsName } from "@/configs/google-sheets";
 import { googleServices } from "@/services/googleapis";
-import dayjs from "dayjs";
 
 type Params = {
   name: string;
@@ -29,7 +28,7 @@ export const bookingSeats = async ({
   drink = 0,
   combo = 0,
 }: Params) => {
-  const createdDate = dayjs(new Date()).format("DD-MM-YYYY HH:mm:ss");
+  const createdDate = new Date().toISOString();
   return googleServices.append({
     range: `${SheetsName.booking}!A:H`,
     valueInputOption: "USER_ENTERED",
