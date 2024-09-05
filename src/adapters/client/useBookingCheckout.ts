@@ -1,5 +1,6 @@
 "use client";
 
+import { DrinkData, PopcornData } from "@/core/foods";
 import { TSeat } from "@/core/seat/types";
 import { TUser } from "@/core/user/type";
 import { handlePayment } from "@/services/payment/payment";
@@ -9,9 +10,8 @@ import { useRouter } from "next/navigation";
 type Params = {
   user: TUser;
   bill?: File;
-  popcorn: number;
-  drink: number;
-  combo: number;
+  popcorn: PopcornData;
+  drink: DrinkData;
   seats: TSeat[];
   reservationId?: string;
 };
@@ -26,7 +26,6 @@ export const useBookingCheckout = () => {
     bill,
     popcorn,
     drink,
-    combo,
     reservationId,
   }: Params) => {
     if (!seats.length) return;
@@ -37,9 +36,8 @@ export const useBookingCheckout = () => {
     formData.append("name", user.name);
     formData.append("email", user.email);
     formData.append("phone", user.phone);
-    formData.append("popcorn", popcorn.toString());
-    formData.append("drink", drink.toString());
-    formData.append("combo", combo.toString());
+    formData.append("popcorn", JSON.stringify(popcorn));
+    formData.append("drink", JSON.stringify(drink));
     if (reservationId) {
       formData.append("reservationId", reservationId);
     }

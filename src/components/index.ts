@@ -7,3 +7,5 @@ export * from "./BookingInfo";
 export * from "./PaymentInfo";
 export * from "./TotalPrice";
 export * from "./email-template";
+export * from "./form-control/Checkbox";
+export * from "./Collapse";

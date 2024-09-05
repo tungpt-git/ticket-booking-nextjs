@@ -5,7 +5,7 @@ import {
 
 export const slotCount = 17;
 
-export const SCREEN_TEXT = "The One With 30 Years of F.R.I.E.N.D.S";
+export const SCREEN_TEXT = "ĐÂY LÀ MÀN HÌNH";
 
 export const allSeats = {
   ...fullSingleSeatRow({

@@ -21,10 +21,10 @@ export const CounterInput = ({
   return (
     <div className={classNames("flex justify-between items-center", className)}>
       <div>
-        <div className="font-medium">{label}</div>
+        <div className="font-medium text-sm">{label}</div>
         {!!description && <div className="text-sm italic">({description})</div>}
         <div className="flex items-center gap-2">
-          <div className="text-sm">{formatPrice(price)}</div>
+          <div className="text-xs">{formatPrice(price)}</div>
           <Counter value={value} setValue={setValue} min={0} max={100} />
         </div>
       </div>

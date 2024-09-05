@@ -4,7 +4,6 @@ import classNames from "classnames";
 
 type Props = {
   popcorn?: number;
-  combo?: number;
   drink?: number;
   seats: TSeat[];
   hideLabel?: boolean;
@@ -14,7 +13,6 @@ type Props = {
 export const TotalPrice = ({
   seats,
   popcorn = 0,
-  combo = 0,
   drink = 0,
   hideLabel = false,
   className,
@@ -26,14 +24,9 @@ export const TotalPrice = ({
       count: popcorn,
     },
     {
-      label: "Nước",
+      label: "Đồ uống",
       price: drink * PRICES.DRINK,
       count: drink,
-    },
-    {
-      label: "Combo bỏng & nước",
-      price: combo * PRICES.COMBO,
-      count: combo,
     },
   ];
 

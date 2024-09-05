@@ -10,7 +10,6 @@ type Props = PropsWithChildren & {
   selectedSeat: TSeat[];
   setPreviewType?(type: TSeat["type"] | null): void;
   popcorn?: number;
-  combo?: number;
   drink?: number;
   showTotal?: boolean;
   className?: string;
@@ -20,7 +19,6 @@ export const BookingInfo = ({
   selectedSeat,
   setPreviewType,
   popcorn = 0,
-  combo = 0,
   drink = 0,
   showTotal = false,
   children,
@@ -35,14 +33,9 @@ export const BookingInfo = ({
       count: popcorn,
     },
     {
-      label: "Nước",
+      label: "Đồ uống",
       price: drink * PRICES.DRINK,
       count: drink,
-    },
-    {
-      label: "Combo bỏng & nước",
-      price: combo * PRICES.COMBO,
-      count: combo,
     },
   ];
 
@@ -99,7 +92,6 @@ export const BookingInfo = ({
           seats={selectedSeat}
           popcorn={popcorn}
           drink={drink}
-          combo={combo}
         />
       )}
     </div>

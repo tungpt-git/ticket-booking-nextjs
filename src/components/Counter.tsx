@@ -1,5 +1,4 @@
 import isNumber from "lodash-es/isNumber";
-import { Dispatch, SetStateAction } from "react";
 
 export const Counter = ({
   value,
@@ -8,7 +7,7 @@ export const Counter = ({
   max,
 }: {
   value: number;
-  setValue: Dispatch<SetStateAction<number>>;
+  setValue(value: number): void;
   min?: number;
   max?: number;
 }) => {

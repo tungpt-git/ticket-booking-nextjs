@@ -1,3 +1,23 @@
+const Friends = () => {
+  return (
+    <div className="flex">
+      <span className="w-4 text-center">F</span>
+      <span className="w-4 text-center text-red-500">•</span>
+      <span className="w-4 text-center">R</span>
+      <span className="w-4 text-center text-yellow-500">•</span>
+      <span className="w-4 text-center">I</span>
+      <span className="w-4 text-center text-blue-500">•</span>
+      <span className="w-4 text-center">E</span>
+      <span className="w-4 text-center text-red-500">•</span>
+      <span className="w-4 text-center">N</span>
+      <span className="w-4 text-center text-yellow-500">•</span>
+      <span className="w-4 text-center 0">D</span>
+      <span className="w-4 text-center text-blue-500">•</span>
+      <span className="w-4 text-center">S</span>
+    </div>
+  );
+};
+
 export default function Layout({
   children,
 }: Readonly<{
@@ -5,7 +25,11 @@ export default function Layout({
 }>) {
   return (
     <>
-      <nav className="navbar flex gap-2 w-full justify-end lg:px-12 shadow-sm">
+      <nav className="navbar flex gap-2 w-full justify-between lg:px-12 shadow-sm">
+        <div className="flex gap-2 font-medium text-xl">
+          <p className="hidden lg:block">The One With 30 Years of</p>{" "}
+          <Friends />
+        </div>
         <a
           href="https://www.facebook.com/profile.php?id=61562681930401"
           className="text-2xl"

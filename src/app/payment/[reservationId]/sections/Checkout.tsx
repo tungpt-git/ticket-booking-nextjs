@@ -13,13 +13,15 @@ import { type TSeat } from "@/core/seat/types";
 import { PRICES } from "@/core/seat/price";
 import { ALLOWED_IMAGES_MIME_TYPE, MAX_FILE_SIZE } from "@/core";
 import { type TUserForm } from "@/core/checkout/types";
+import { DrinkData, PopcornData } from "@/core/foods";
 //
-import { BookingInfo, Button, CounterInput, FileUpload } from "@/components";
+import { BookingInfo, Button, FileUpload } from "@/components";
+//
+import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
 //
 import { UserInfoForm } from "../_components/UserInfoForm";
-import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
 import { Timer } from "../_components/Timer";
-import { FOODS_DESCRIPTION } from "@/core/foods";
+import { FoodCateen } from "../_components/FoodCateen";
 
 type Props = {
   selectedSeat: TSeat[];
@@ -29,9 +31,23 @@ type Props = {
 export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
   const params = useParams<{ reservationId?: string }>();
   const userFormRef = useRef<HTMLFormElement | null>(null);
-  const [popcorn, setPopcorn] = useState<number>(0);
-  const [drink, setDrink] = useState<number>(0);
-  const [combo, setCombo] = useState<number>(0);
+  const [popcorn, setPopcorn] = useState<PopcornData>({
+    classic: 0,
+    cheese: 0,
+    caramel: 0,
+  });
+  const [drink, setDrink] = useState<DrinkData>({
+    pepsi: 0,
+    _7up: 0,
+    miranda: 0,
+    lipton: 0,
+  });
+
+  const popcornTotal = Object.values(popcorn).reduce(
+    (acc, cur) => acc + cur,
+    0
+  );
+  const drinkTotal = Object.values(drink).reduce((acc, cur) => acc + cur, 0);
 
   const { checkout, loading } = useBookingCheckout();
 
@@ -50,63 +66,78 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
       bill: data.bill,
       popcorn,
       drink,
-      combo,
       seats: selectedSeat,
       reservationId: params.reservationId,
     });
   };
 
-  const foods = [
+  const popcornTypes = [
     {
-      label: "🍿Bỏng",
+      label: "Vị Thường",
       price: PRICES.POPCORN,
-      value: popcorn,
-      setValue: setPopcorn,
-      description: FOODS_DESCRIPTION.POPCORN,
+      value: popcorn.classic,
+      setValue: (classic: number) =>
+        setPopcorn((prev) => ({ ...prev, classic })),
     },
     {
-      label: "🥤Nước",
+      label: "Vị Phô mai",
+      price: PRICES.POPCORN,
+      value: popcorn.cheese,
+      setValue: (cheese: number) => setPopcorn((prev) => ({ ...prev, cheese })),
+    },
+    {
+      label: "Vị Caramel",
+      price: PRICES.POPCORN,
+      value: popcorn.caramel,
+      setValue: (caramel: number) =>
+        setPopcorn((prev) => ({ ...prev, caramel })),
+    },
+  ];
+
+  const drinkTypes = [
+    {
+      label: "Pepsi",
       price: PRICES.DRINK,
-      value: drink,
-      setValue: setDrink,
-      description: FOODS_DESCRIPTION.DRINK,
+      value: drink.pepsi,
+      setValue: (pepsi: number) => setDrink((prev) => ({ ...prev, pepsi })),
     },
     {
-      label: "🍿🥤Combo bỏng & nước",
-      price: PRICES.COMBO,
-      value: combo,
-      setValue: setCombo,
-      description: FOODS_DESCRIPTION.COMBO,
+      label: "7up",
+      price: PRICES.DRINK,
+      value: drink._7up,
+      setValue: (_7up: number) => setDrink((prev) => ({ ...prev, _7up })),
+    },
+    {
+      label: "Miranda",
+      price: PRICES.DRINK,
+      value: drink.miranda,
+      setValue: (miranda: number) => setDrink((prev) => ({ ...prev, miranda })),
+    },
+    {
+      label: "Liption chanh",
+      price: PRICES.DRINK,
+      value: drink.lipton,
+      setValue: (lipton: number) => setDrink((prev) => ({ ...prev, lipton })),
     },
   ];
 
   return (
     <form ref={userFormRef} action={onSubmit}>
-      <section className="grid grid-cols-1	gap-5 px-3">
+      <section className="grid grid-cols-1 gap-5 px-3">
         <Block title="Thông tin cá nhân">
           <UserInfoForm />
         </Block>
-        <Block title="Chọn đồ ăn">
-          {foods.map((food) => (
-            <CounterInput
-              key={food.label}
-              className="mb-4"
-              label={food.label}
-              price={food.price}
-              value={food.value}
-              setValue={food.setValue}
-              description={food.description}
-            />
-          ))}
+        <Block title="Chọn đồ ăn" topGap={false}>
+          <FoodCateen title="Chọn bỏng 🍿" foods={popcornTypes} />
+          <FoodCateen title="Chọn đồ uống 🥤" foods={drinkTypes} />
         </Block>
-        <Block title="Thanh toán" forceOpen>
+        <Block title="Thanh toán" forceOpen topGap={false}>
           <div className="lg:flex">
             <div>
               <BookingInfo
                 selectedSeat={selectedSeat}
-                popcorn={popcorn}
-                drink={drink}
-                combo={combo}
+                popcorn={popcornTotal}
+                drink={drinkTotal}
                 showTotal
               />
               <p className="font-medium italic text-error">
@@ -115,8 +146,11 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
             </div>
             <div className="divider divider-horizontal" />
             <div className="mt-4 lg:mt-0">
+              <p className="font-medium italic text-error lg:w-[300px]">
+                * Nội dung chuyển khoản: SĐT + số ghế. Ví dụ: 0987654321 G9 G10
+              </p>
               <Image
-                className="m-auto"
+                className="m-auto my-4"
                 alt="bank_account_qr"
                 src="/images/ticket-booking-qr.jpg"
                 width={300}
@@ -124,11 +158,9 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
                 unoptimized
                 loader={({ src }) => src}
               />
-
               <FileUpload
                 label="Vui lòng tải ảnh chụp màn hình chuyển khoản"
                 name="bill"
-                className="mt-4"
                 required
                 accept={ALLOWED_IMAGES_MIME_TYPE.join(",")}
                 onChange={(evt) => {
@@ -170,10 +202,12 @@ const Block = ({
   title,
   children,
   forceOpen: _forceOpen,
+  topGap = true,
   ...props
 }: PropsWithChildren<ComponentProps<"div">> & {
   title?: string;
   forceOpen?: boolean;
+  topGap?: boolean;
 }) => {
   const [open, setOpen] = useState(true);
   const forceOpen = _forceOpen || !title;
@@ -198,7 +232,7 @@ const Block = ({
         </h4>
       )}
       <div className="collapse-content border-t border-dashed">
-        <div className="h-4" />
+        {topGap && <div className="h-4" />}
         {children}
       </div>
     </div>

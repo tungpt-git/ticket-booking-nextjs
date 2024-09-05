@@ -13,21 +13,11 @@ type Data = {
   bill: File;
   popcorn: string;
   drink: string;
-  combo: string;
   reservationId?: string;
 };
 export const handlePayment = async (formData: FormData) => {
-  const {
-    seats,
-    name,
-    email,
-    phone,
-    bill,
-    popcorn,
-    drink,
-    combo,
-    reservationId,
-  } = Object.fromEntries(formData) as unknown as Data;
+  const { seats, name, email, phone, bill, popcorn, drink, reservationId } =
+    Object.fromEntries(formData) as unknown as Data;
 
   let fileId: string = "";
   try {
@@ -46,9 +36,8 @@ export const handlePayment = async (formData: FormData) => {
         ? `=IMAGE("https://drive.google.com/thumbnail?id=${fileId}&sz=w1000")`
         : "",
       {
-        popcorn: +popcorn,
-        drink: +drink,
-        combo: +combo,
+        popcorn,
+        drink,
       }
     );
 
