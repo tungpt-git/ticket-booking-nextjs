@@ -22,8 +22,7 @@ export const useReservation = () => {
       await runAction?.(formData);
       router.push(`/payment/${id}`);
     } catch (error) {
-      const { message } = error as Error;
-      alert(message, {
+      alert(`Ghế ${seatIds.join(" ")} đã bị đặt`, {
         style: {
           backgroundColor: "#EF4444",
           color: "#FFFFFF",

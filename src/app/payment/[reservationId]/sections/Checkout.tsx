@@ -19,6 +19,7 @@ import { BookingInfo, Button, CounterInput, FileUpload } from "@/components";
 import { UserInfoForm } from "../_components/UserInfoForm";
 import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
 import { Timer } from "../_components/Timer";
+import { FOODS_DESCRIPTION } from "@/core/foods";
 
 type Props = {
   selectedSeat: TSeat[];
@@ -61,21 +62,21 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
       price: PRICES.POPCORN,
       value: popcorn,
       setValue: setPopcorn,
-      description: "1 bỏng tùy chọn caramel/thường",
+      description: FOODS_DESCRIPTION.POPCORN,
     },
     {
       label: "🥤Nước",
       price: PRICES.DRINK,
       value: drink,
       setValue: setDrink,
-      description: "1 nước tùy chọn 7up/Pepsi",
+      description: FOODS_DESCRIPTION.DRINK,
     },
     {
       label: "🍿🥤Combo bỏng & nước",
       price: PRICES.COMBO,
       value: combo,
       setValue: setCombo,
-      description: "Combo 1 bỏng và 1 nước",
+      description: FOODS_DESCRIPTION.COMBO,
     },
   ];
 

@@ -11,7 +11,7 @@ import { MultipleSeat } from "../_components/MultipleSeat";
 import { SeatLengend } from "../_components/SeatLengend";
 //
 import { type TSeat } from "@/core/seat/types";
-import { slotCount } from "@/core/seat";
+import { SCREEN_TEXT, slotCount } from "@/core/seat";
 import { TUser } from "@/core/user/type";
 
 type Props = {
@@ -56,7 +56,7 @@ export function Room({
     <div>
       <div className="text-center text-2xl pt-6">
         <span className="inline-block">🍿🍿</span>
-        {" ĐÂY LÀ MÀN HÌNH "}
+        {SCREEN_TEXT}
         <span className="inline-block">🍿🍿</span>
       </div>
       <div className="overflow-auto">
