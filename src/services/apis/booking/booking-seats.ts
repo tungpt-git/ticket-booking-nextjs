@@ -10,9 +10,9 @@ type Params = {
   notes?: string;
   bill?: string;
   total?: number;
-  popcorn: number;
-  drink: number;
-  combo: number;
+  popcorn: string;
+  drink: string;
+  merch: string;
 };
 
 export const bookingSeats = async ({
@@ -24,9 +24,9 @@ export const bookingSeats = async ({
   notes,
   bill,
   total,
-  popcorn = 0,
-  drink = 0,
-  combo = 0,
+  popcorn = "0",
+  drink = "0",
+  merch,
 }: Params) => {
   const createdDate = new Date().toISOString();
   return googleServices.append({
@@ -43,7 +43,7 @@ export const bookingSeats = async ({
           count,
           popcorn,
           drink,
-          combo,
+          merch,
           total,
           bill,
           notes,

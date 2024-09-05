@@ -1,3 +1,5 @@
+import { DrinkData, PopcornData } from "../foods";
+import { calcMerchTotal, MerchData } from "../merchandise";
 import { TSeat } from "./types";
 
 export const formatPrice = (value: number, multipler = 1000) => {
@@ -17,18 +19,40 @@ export const PRICES = {
   COMBO: 90,
 };
 
+export const countPopcorn = (data?: PopcornData) =>
+  !data ? 0 : Object.values(data).reduce((total, count) => total + count, 0);
+
+export const countDrink = (data?: DrinkData) =>
+  !data ? 0 : Object.values(data).reduce((total, count) => total + count, 0);
+
+export const calcPopcornTotal = (data?: PopcornData) =>
+  !data
+    ? 0
+    : Object.values(data).reduce(
+        (total, count) => total + count * PRICES.POPCORN,
+        0
+      );
+
+export const calcDrinkTotal = (data?: DrinkData) =>
+  !data
+    ? 0
+    : Object.values(data).reduce(
+        (total, count) => total + count * PRICES.DRINK,
+        0
+      );
+
 export const calcBillTotal = ({
   seats,
-  popcorn = 0,
-  drink = 0,
-  combo = 0,
+  popcornData,
+  drinkData,
+  merchData,
 }: {
   seats: TSeat[];
-  popcorn: number;
-  drink: number;
-  combo: number;
+  popcornData?: PopcornData;
+  drinkData?: DrinkData;
+  merchData?: MerchData;
 }) =>
   sumPrice(seats) +
-  PRICES.POPCORN * popcorn +
-  PRICES.DRINK * drink +
-  PRICES.COMBO * combo;
+  calcPopcornTotal(popcornData) +
+  calcDrinkTotal(drinkData) +
+  calcMerchTotal(merchData);

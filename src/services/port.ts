@@ -5,8 +5,7 @@ export type TSeatService = {
   booking(
     seats: TSeat[],
     user: TUser,
-    bill: string,
-    foods: { popcorn: string; drink: string }
+    others: { bill: string; popcorn: string; drink: string; merch: string }
   ): Promise<void>;
   getAllBooking(): Promise<Array<TSeat & { user: TUser }>>;
 };

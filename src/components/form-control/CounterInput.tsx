@@ -8,6 +8,8 @@ type Props = ComponentProps<typeof Counter> & {
   label: string;
   className?: string;
   description?: string;
+  size?: "md" | "sm";
+  showPrice?: boolean;
 };
 
 export const CounterInput = ({
@@ -17,18 +19,39 @@ export const CounterInput = ({
   price,
   className,
   description,
+  size = "md",
+  showPrice = true,
 }: Props) => {
   return (
     <div className={classNames("flex justify-between items-center", className)}>
       <div>
-        <div className="font-medium text-sm">{label}</div>
-        {!!description && <div className="text-sm italic">({description})</div>}
+        <div
+          className={classNames("font-medium", {
+            "text-sm": size === "sm",
+          })}
+        >
+          {label}
+        </div>
+        {!!description && (
+          <div
+            className={classNames("italic", {
+              "text-sm": size === "md",
+              "text-xs": size === "sm",
+            })}
+          >
+            ({description})
+          </div>
+        )}
         <div className="flex items-center gap-2">
-          <div className="text-xs">{formatPrice(price)}</div>
+          {showPrice && (
+            <div className={classNames({ "text-xs": size === "sm" })}>
+              {formatPrice(price)}
+            </div>
+          )}
           <Counter value={value} setValue={setValue} min={0} max={100} />
         </div>
       </div>
-      <span>{`${formatPrice(value * price)}`}</span>
+      <span className="mt-auto">{`${formatPrice(value * price)}`}</span>
     </div>
   );
 };

@@ -1,43 +1,75 @@
 import { groupBy } from "lodash-es";
 import { labelLookup, TSeat } from "@/core/seat/types";
-import { formatPrice, PRICES, sumPrice } from "@/core/seat/price";
+import {
+  calcDrinkTotal,
+  calcPopcornTotal,
+  countDrink,
+  countPopcorn,
+  formatPrice,
+  sumPrice,
+} from "@/core/seat/price";
 import { TotalPrice } from "./TotalPrice";
 import { PaymentInfo } from "./PaymentInfo";
 import { PropsWithChildren } from "react";
 import classNames from "classnames";
+import {
+  MERCHANDISE_LABELS,
+  MERCHANDISE_PRICES,
+  MerchData,
+} from "@/core/merchandise";
+import { DrinkData, PopcornData } from "@/core/foods";
 
 type Props = PropsWithChildren & {
   selectedSeat: TSeat[];
   setPreviewType?(type: TSeat["type"] | null): void;
-  popcorn?: number;
-  drink?: number;
+
   showTotal?: boolean;
   className?: string;
+  popcorn?: PopcornData;
+  drink?: DrinkData;
+  merch?: MerchData;
 };
 
 export const BookingInfo = ({
   selectedSeat,
   setPreviewType,
-  popcorn = 0,
-  drink = 0,
+  popcorn,
+  drink,
   showTotal = false,
   children,
   className,
+  merch,
 }: Props) => {
   const seatGroupedByType = groupBy(selectedSeat, "type");
 
   const foods = [
     {
       label: "Bỏng",
-      price: popcorn * PRICES.POPCORN,
-      count: popcorn,
+      price: calcPopcornTotal(popcorn),
+      count: countPopcorn(popcorn),
     },
     {
       label: "Đồ uống",
-      price: drink * PRICES.DRINK,
-      count: drink,
+      price: calcDrinkTotal(drink),
+      count: countDrink(drink),
     },
   ];
+
+  const merchs = merch
+    ? [
+        {
+          label: MERCHANDISE_LABELS.lobster,
+          price: merch.lobster * MERCHANDISE_PRICES.lobster,
+          count: merch.lobster,
+        },
+
+        {
+          label: MERCHANDISE_LABELS.cup,
+          price: merch.cup * MERCHANDISE_PRICES.cup,
+          count: merch.cup,
+        },
+      ]
+    : [];
 
   return (
     <div
@@ -75,6 +107,18 @@ export const BookingInfo = ({
       )}
       <>
         {foods
+          .filter((el) => el.price > 0)
+          .map((item) => (
+            <PaymentInfo
+              key={item.label}
+              label={item.label}
+              count={item.count}
+              price={formatPrice(item.price)}
+            />
+          ))}
+      </>
+      <>
+        {merchs
           .filter((el) => el.count > 0)
           .map((item) => (
             <PaymentInfo
@@ -92,6 +136,7 @@ export const BookingInfo = ({
           seats={selectedSeat}
           popcorn={popcorn}
           drink={drink}
+          merch={merch}
         />
       )}
     </div>

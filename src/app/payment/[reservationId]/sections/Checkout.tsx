@@ -15,13 +15,14 @@ import { ALLOWED_IMAGES_MIME_TYPE, MAX_FILE_SIZE } from "@/core";
 import { type TUserForm } from "@/core/checkout/types";
 import { DrinkData, PopcornData } from "@/core/foods";
 //
-import { BookingInfo, Button, FileUpload } from "@/components";
+import { BookingInfo, Button, CounterInput, FileUpload } from "@/components";
 //
 import { useBookingCheckout } from "@/adapters/client/useBookingCheckout";
 //
 import { UserInfoForm } from "../_components/UserInfoForm";
 import { Timer } from "../_components/Timer";
 import { FoodCateen } from "../_components/FoodCateen";
+import { MERCHANDISE_PRICES, MerchData } from "@/core/merchandise";
 
 type Props = {
   selectedSeat: TSeat[];
@@ -42,12 +43,10 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
     miranda: 0,
     lipton: 0,
   });
-
-  const popcornTotal = Object.values(popcorn).reduce(
-    (acc, cur) => acc + cur,
-    0
-  );
-  const drinkTotal = Object.values(drink).reduce((acc, cur) => acc + cur, 0);
+  const [merch, setMerch] = useState<MerchData>({
+    cup: 0,
+    lobster: 0,
+  });
 
   const { checkout, loading } = useBookingCheckout();
 
@@ -68,6 +67,7 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
       drink,
       seats: selectedSeat,
       reservationId: params.reservationId,
+      merch,
     });
   };
 
@@ -121,6 +121,24 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
     },
   ];
 
+  const merchandiseItems = [
+    {
+      label: "Túi + móc khoá tôm hùm",
+      price: MERCHANDISE_PRICES.lobster,
+      value: merch.lobster,
+      setValue: (lobster: number) => setMerch((prev) => ({ ...prev, lobster })),
+      imgSrc: "/images/lobster3.jpg",
+    },
+    {
+      label: "Ly nước F.R.I.E.N.D.S",
+      price: MERCHANDISE_PRICES.cup,
+      description: "Tặng kèm bịt chống tràn + túi đựng",
+      value: merch.cup,
+      setValue: (cup: number) => setMerch((prev) => ({ ...prev, cup })),
+      imgSrc: "/images/cup4.jpg",
+    },
+  ];
+
   return (
     <form ref={userFormRef} action={onSubmit}>
       <section className="grid grid-cols-1 gap-5 px-3">
@@ -131,13 +149,30 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
           <FoodCateen title="Chọn bỏng 🍿" foods={popcornTypes} />
           <FoodCateen title="Chọn đồ uống 🥤" foods={drinkTypes} />
         </Block>
+        <Block title="Merchandise">
+          {merchandiseItems.map((item) => (
+            <div key={item.label} className="flex w-full mb-2 gap-2">
+              <Image src={item.imgSrc} alt="merch" width={100} height={200} />
+              <CounterInput
+                className="mb-4 last:mb-0 flex-1 flex-col !items-start"
+                label={item.label}
+                description={item.description}
+                price={item.price}
+                value={item.value}
+                setValue={item.setValue}
+                showPrice={false}
+              />
+            </div>
+          ))}
+        </Block>
         <Block title="Thanh toán" forceOpen topGap={false}>
           <div className="lg:flex">
             <div>
               <BookingInfo
                 selectedSeat={selectedSeat}
-                popcorn={popcornTotal}
-                drink={drinkTotal}
+                popcorn={popcorn}
+                drink={drink}
+                merch={merch}
                 showTotal
               />
               <p className="font-medium italic text-error">

@@ -5,9 +5,9 @@ interface EmailTemplateProps {
   name: string;
   phone: string;
   email: string;
-  popcorn: number;
-  drink: number;
-  combo: number;
+  popcorn: string;
+  drink: string;
+  merch: string;
   total: number;
 }
 
@@ -17,8 +17,8 @@ export const BookingInfoTpl: React.FC<Readonly<EmailTemplateProps>> = ({
   email,
   popcorn,
   drink,
-  combo,
   seats,
+  merch,
   total,
 }) => (
   <div>
@@ -48,8 +48,8 @@ export const BookingInfoTpl: React.FC<Readonly<EmailTemplateProps>> = ({
         <td>{drink}</td>
       </tr>
       <tr>
-        <th style={{ textAlign: "left" }}>Combo:</th>
-        <td>{combo}</td>
+        <th style={{ textAlign: "left" }}>Merch:</th>
+        <td>{merch}</td>
       </tr>
       <tr>
         <th style={{ textAlign: "left" }}>Total:</th>

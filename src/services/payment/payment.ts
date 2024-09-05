@@ -14,10 +14,20 @@ type Data = {
   popcorn: string;
   drink: string;
   reservationId?: string;
+  merch: string;
 };
 export const handlePayment = async (formData: FormData) => {
-  const { seats, name, email, phone, bill, popcorn, drink, reservationId } =
-    Object.fromEntries(formData) as unknown as Data;
+  const {
+    seats,
+    name,
+    email,
+    phone,
+    bill,
+    popcorn,
+    drink,
+    reservationId,
+    merch,
+  } = Object.fromEntries(formData) as unknown as Data;
 
   let fileId: string = "";
   try {
@@ -32,12 +42,13 @@ export const handlePayment = async (formData: FormData) => {
         email,
         phone,
       },
-      fileId
-        ? `=IMAGE("https://drive.google.com/thumbnail?id=${fileId}&sz=w1000")`
-        : "",
       {
+        bill: fileId
+          ? `=IMAGE("https://drive.google.com/thumbnail?id=${fileId}&sz=w1000")`
+          : "",
         popcorn,
         drink,
+        merch,
       }
     );
 

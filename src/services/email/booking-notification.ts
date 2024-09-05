@@ -6,9 +6,9 @@ type Data = {
   name: string;
   phone: string;
   email: string;
-  popcorn: number;
-  drink: number;
-  combo: number;
+  popcorn: string;
+  drink: string;
+  merch: string;
   total: number;
 };
 
@@ -19,7 +19,7 @@ export const sendBookingNotification = async ({
   phone,
   popcorn,
   drink,
-  combo,
+  merch,
   total,
 }: Data) => {
   try {
@@ -42,7 +42,7 @@ export const sendBookingNotification = async ({
         phone,
         popcorn,
         drink,
-        combo,
+        merch,
         total,
       }) as React.ReactElement,
     });

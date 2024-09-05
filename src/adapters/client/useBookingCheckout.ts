@@ -1,6 +1,7 @@
 "use client";
 
 import { DrinkData, PopcornData } from "@/core/foods";
+import { MerchData } from "@/core/merchandise";
 import { TSeat } from "@/core/seat/types";
 import { TUser } from "@/core/user/type";
 import { handlePayment } from "@/services/payment/payment";
@@ -14,6 +15,7 @@ type Params = {
   drink: DrinkData;
   seats: TSeat[];
   reservationId?: string;
+  merch: MerchData;
 };
 
 export const useBookingCheckout = () => {
@@ -27,6 +29,7 @@ export const useBookingCheckout = () => {
     popcorn,
     drink,
     reservationId,
+    merch,
   }: Params) => {
     if (!seats.length) return;
 
@@ -38,6 +41,8 @@ export const useBookingCheckout = () => {
     formData.append("phone", user.phone);
     formData.append("popcorn", JSON.stringify(popcorn));
     formData.append("drink", JSON.stringify(drink));
+    formData.append("merch", JSON.stringify(merch));
+
     if (reservationId) {
       formData.append("reservationId", reservationId);
     }

@@ -1,10 +1,13 @@
-import { formatPrice, PRICES, sumPrice } from "@/core/seat/price";
+import { DrinkData, PopcornData } from "@/core/foods";
+import { MerchData } from "@/core/merchandise";
+import { calcBillTotal, formatPrice } from "@/core/seat/price";
 import { TSeat } from "@/core/seat/types";
 import classNames from "classnames";
 
 type Props = {
-  popcorn?: number;
-  drink?: number;
+  popcorn?: PopcornData;
+  drink?: DrinkData;
+  merch?: MerchData;
   seats: TSeat[];
   hideLabel?: boolean;
   className?: string;
@@ -12,32 +15,22 @@ type Props = {
 
 export const TotalPrice = ({
   seats,
-  popcorn = 0,
-  drink = 0,
+  popcorn: popcornData,
+  drink: drinkData,
+  merch: merchData,
   hideLabel = false,
   className,
 }: Props) => {
-  const foods = [
-    {
-      label: "Bỏng",
-      price: popcorn * PRICES.POPCORN,
-      count: popcorn,
-    },
-    {
-      label: "Đồ uống",
-      price: drink * PRICES.DRINK,
-      count: drink,
-    },
-  ];
-
-  const totalPrice = formatPrice(
-    sumPrice(seats) + foods.reduce((acc, el) => acc + el.price, 0)
-  );
-
+  const totalPrice = calcBillTotal({
+    seats,
+    popcornData,
+    drinkData,
+    merchData,
+  });
   return (
     <div className={classNames("flex justify-between font-medium", className)}>
       {!hideLabel && <span>Tổng cộng:</span>}
-      <span>{totalPrice}</span>
+      <span>{formatPrice(totalPrice)}</span>
     </div>
   );
 };
