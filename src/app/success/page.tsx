@@ -21,8 +21,8 @@ export default async function Page() {
           </span>
           <h1 className="text-2xl font-bold">Đặt chỗ thành công!</h1>
           <p className="mt-4">
-            Cảm ơn bạn đã đặt chỗ. Email xác nhận sẽ được gửi đến địa chỉ email
-            của bạn trong vòng 24h
+            Cảm ơn bạn đã đặt chỗ. Email xác nhận sẽ được gửi đến bạn trong vòng
+            24h kể từ khi thanh toán thành công.
           </p>
 
           <a
