@@ -21,7 +21,7 @@ export const useReservation = () => {
       const id = v4();
       formData.append("id", id);
       const res: any = await runAction?.(formData).then((res: any) => res.data);
-
+      console.log(res);
       if (res.error) {
         if (res.error === ERROR_CODES.RESERVATION_ALREADY_EXISTS) {
           throw new Error(`Ghế ${res.data} đã được đặt`);

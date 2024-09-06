@@ -16,7 +16,7 @@ export default async function Payment({ params }: { params: Params }) {
   const data = await getAll();
   const reservation = data.find((el) => el.id === params.reservationId);
   if (!reservation) {
-    redirect("/not-found", RedirectType.replace);
+    redirect("/booking", RedirectType.replace);
   }
   return (
     <main className="min-h-screen flex items-center justify-center py-12">

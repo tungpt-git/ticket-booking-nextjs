@@ -18,8 +18,9 @@ export const reservation = async (formData: FormData) => {
   }
   const isReservationExist = await checkExist(seatIds);
 
-  if (isReservationExist) {
+  if (isReservationExist.length > 0) {
     return {
+      success: false,
       error: ERROR_CODES.RESERVATION_ALREADY_EXISTS,
       data: isReservationExist.map((el) => el.seatIds).join(" "),
     };
@@ -37,4 +38,7 @@ export const reservation = async (formData: FormData) => {
       values: [[id ?? uuidv4(), seatIds.join(JOIN_CHARACTER), expiryTime]],
     },
   });
+  return {
+    success: true,
+  };
 };
