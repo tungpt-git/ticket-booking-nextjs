@@ -10,6 +10,8 @@ export const getAll = async () => {
   });
 
   const data: TReservation[] = (res.data.values ?? []).reduce((acc, row) => {
+    console.log(row);
+    if (row.length === 0) return acc;
     const [id, seatIds, expiryTime] = row as [string, string, string];
 
     return [
