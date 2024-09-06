@@ -19,12 +19,10 @@ export const reservation = async (formData: FormData) => {
   const isReservationExist = await checkExist(seatIds);
 
   if (isReservationExist) {
-    throw new Error(
-      ERROR_CODES.RESERVATION_ALREADY_EXISTS.replace(
-        ":seat",
-        isReservationExist.seatIds.toString()
-      )
-    );
+    return {
+      error: ERROR_CODES.RESERVATION_ALREADY_EXISTS,
+      data: isReservationExist.map((el) => el.seatIds).join(" "),
+    };
   }
 
   const now = dayjs(new Date());
