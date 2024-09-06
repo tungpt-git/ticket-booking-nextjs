@@ -1,3 +1,4 @@
+export const revalidate = 120;
 import React, { type ReactElement } from "react";
 
 import { seatService } from "@/services/seats";
