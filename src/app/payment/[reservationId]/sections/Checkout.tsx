@@ -1,6 +1,7 @@
 "use client";
 import React, {
   ComponentProps,
+  Fragment,
   PropsWithChildren,
   useRef,
   useState,
@@ -128,6 +129,7 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
       value: merch.lobster,
       setValue: (lobster: number) => setMerch((prev) => ({ ...prev, lobster })),
       imgSrc: "/images/lobster3.jpg",
+      soldOut: false,
     },
     {
       label: "Ly nước F.R.I.E.N.D.S",
@@ -136,6 +138,7 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
       value: merch.cup,
       setValue: (cup: number) => setMerch((prev) => ({ ...prev, cup })),
       imgSrc: "/images/cup4.jpg",
+      soldOut: true,
     },
   ];
 
@@ -151,18 +154,9 @@ export const Checkout = ({ selectedSeat, expiryTime }: Props) => {
         </Block>
         <Block title="Merchandise">
           {merchandiseItems.map((item) => (
-            <div key={item.label} className="flex w-full mb-2 gap-2">
-              <Image src={item.imgSrc} alt="merch" width={100} height={200} />
-              <CounterInput
-                className="mb-4 last:mb-0 flex-1 flex-col !items-start"
-                label={item.label}
-                description={item.description}
-                price={item.price}
-                value={item.value}
-                setValue={item.setValue}
-                showPrice={false}
-              />
-            </div>
+            <Fragment key={item.label}>
+              <MerchandiseItem {...item} />
+            </Fragment>
           ))}
         </Block>
         <Block title="Thanh toán" forceOpen topGap={false}>
@@ -270,6 +264,50 @@ const Block = ({
         {topGap && <div className="h-4" />}
         {children}
       </div>
+    </div>
+  );
+};
+
+const MerchandiseItem = ({
+  label,
+  imgSrc,
+  description,
+  price,
+  value,
+  setValue,
+  soldOut,
+}: {
+  imgSrc: string;
+  label: string;
+  description?: string;
+  price: number;
+  value: number;
+  setValue: (value: number) => void;
+  soldOut?: boolean;
+}) => {
+  return (
+    <div
+      className={classNames("flex w-full mb-2 gap-2 relative", {
+        "opacity-50": soldOut,
+      })}
+    >
+      <Image src={imgSrc} alt="merch" width={100} height={200} />
+      <CounterInput
+        className="mb-4 last:mb-0 flex-1 flex-col !items-start"
+        label={label}
+        description={description}
+        price={price}
+        value={value}
+        setValue={soldOut ? () => {} : setValue}
+        showPrice={false}
+      />
+      {soldOut && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="border border-error text-error text-center p-2">
+            HẾT HÀNG
+          </div>
+        </div>
+      )}
     </div>
   );
 };
